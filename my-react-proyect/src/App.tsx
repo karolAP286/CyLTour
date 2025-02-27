@@ -12,6 +12,7 @@ function App() {
   }
   const handleChange  = (event:any) => {
     console.log(event.target.value)
+    setMyValue(event.target.value)
   }
   const upone = () => {
     setNumber(number+1);
