@@ -2,11 +2,25 @@ import { useState } from 'react';
 import './App.css'
 import ButtonComponent from './components/ButtonComponent'
 import HeaderComponent from './components/HeaderComponent'
-import Login from './components/login';
 import MovieList from './components/MovieList';
 import AnimalList from './components/AnimalList';
+import Login from './components/Login';
+import RespuestaApi from './components/respuestaApi';
+import MonumentosList from './components/MonumentosList';
 
 function App() {
+
+  // useEffect(() => {
+  //   console.log("Ejecucion cada vez que se renderiza el componente raiz")
+  // });
+  const [user, setUser] = useState({
+    username: "",
+    email: ""
+  })
+  // useEffect(() => {
+  //   console.log("Ejecucion cada vez que se renderizavariable reactiva user ")
+  // }, [user])
+
   const [number, setNumber] = useState(0);
   const [myValue, setMyValue] = useState("");
   const myPlaceHolder = "escribe aqui"
@@ -18,10 +32,7 @@ function App() {
     news: "news"
   }
 
-  const [user, setUser] = useState({
-    username: "",
-    email: ""
-  })
+  const [showMovies, setShowMoviers] = useState(false);
   const condition = false;
   const sayHello  = () => {
     setgreetings("Bienvenidos a mi web");
@@ -64,8 +75,14 @@ function App() {
         <input type="text" value={myValue} placeholder={myPlaceHolder} onChange={handleChange}/>
         
         <ButtonComponent ></ButtonComponent>
-        <MovieList></MovieList>
+        <br />
+
+        <button onClick={() => setShowMoviers(!showMovies)}>Ver movieList</button>
+        {showMovies && <MovieList></MovieList>}
+        
         <AnimalList></AnimalList>
+        <RespuestaApi></RespuestaApi>
+        <MonumentosList></MonumentosList>
       </main>
       
     </>
