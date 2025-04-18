@@ -9,7 +9,7 @@ use App\Models\Respuesta;
 class RespuestaController extends Controller
 {
     public function index() {
-        return Respuesta::all();
+        return Respuesta::with(["comentario","usuario"])->get();
     }
 
     public function store(Request $request) {

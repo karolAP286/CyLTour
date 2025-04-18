@@ -9,7 +9,7 @@ use App\Models\Usuario;
 class UsuarioController extends Controller
 {
     public function index() {
-        return Usuario::all();
+        return Usuario::with("role")->get();
     }
 
     public function store(Request $request) {

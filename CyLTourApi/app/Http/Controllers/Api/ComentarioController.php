@@ -9,7 +9,7 @@ use App\Models\Comentario;
 class ComentarioController extends Controller
 {
     public function index() {
-        return Comentario::all();
+        return Comentario::with("usuario")->get();
     }
 
     public function store(Request $request) {
