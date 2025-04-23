@@ -1,6 +1,6 @@
 /* Esconde menú horizontal en móvil */
 .menu-desktop {
-    display: flex;
+    display: block;
     background-color: #1EA5CA;
   }
   

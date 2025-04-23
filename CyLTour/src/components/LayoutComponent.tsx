@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Col, Layout, Menu, Row, theme, Drawer, Button } from "antd";
+import { Col, Layout, Menu, Row, theme, Button } from "antd";
 import "./LayoutComponent.css";
 import reactLogo from "../img/logo.svg";
 import CardsComponent from "./CardsComponent";
 import { MenuOutlined } from "@ant-design/icons";
+import MonumentosList from "./MonumentosList";
 
 const { Header, Content, Footer } = Layout;
 
@@ -13,18 +14,11 @@ const items = Array.from({ length: 4 }).map((_, index) => ({
 }));
 
 const LayoutComponent: React.FC = () => {
-    useEffect(() => {
-        const handleResize = () => {
-          if (window.innerWidth > 768) setDrawerVisible(false);
-        };
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-      }, []);
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
 
-    const [drawerVisible, setDrawerVisible] = useState(false);
+    const [drawerVisible, setDrawerVisible] = useState(true);
 
     const provinciasCastillaLeon: string[] = [
         "ávila",
@@ -40,55 +34,58 @@ const LayoutComponent: React.FC = () => {
 
     return (
         <Layout>
-            <Header
-                style={{ display: "flex", alignItems: "center" }}
-                className="mycss"
-            >
-                <div style={{ display: "flex", alignItems: "center", flex: 1 }}>
-                    <img
-                        alt=""
-                        src={reactLogo}
-                        width="30"
-                        height="30"
-                        className="d-inline-block align-top"
-                    />{" "}
-                    <span
+            <Header style={{ display: "flex", alignItems: "center" }}>
+                {
+                    <div
                         style={{
-                            color: "white",
-                            marginLeft: "16px",
-                            fontSize: "1.2em",
+                            display: "flex",
+                            alignItems: "center",
+                            flex: 1,
                         }}
                     >
-                        CyLTour
-                    </span>
-                </div>
-                <Menu
-                    mode="horizontal"
-                    theme="dark"
-                    items={items}
-                    className="menu-desktop"
-                />
+                        <img
+                            alt=""
+                            src={reactLogo}
+                            width="30"
+                            height="30"
+                            className="d-inline-block align-top"
+                        />{" "}
+                        <span
+                            style={{
+                                color: "white",
+                                marginLeft: "16px",
+                                fontSize: "1.2em",
+                            }}
+                        >
+                            CyLTour
+                        </span>
+                    </div>
+                }
+                {drawerVisible ? (
+                    <Menu
+                        className="menu-desktop"
+                        mode="horizontal"
+                        theme="dark"
+                        items={items}
+                    />
+                ) : (
+                    <Menu
+                        className="menu-desktop"
+                        mode="vertical"
+                        theme="dark"
+                        items={items}
+                    />
+                )}
 
                 {/* Mobile hamburger icon */}
                 <Button
                     className="menu-mobile-btn"
                     type="text"
                     icon={<MenuOutlined />}
-                    onClick={() => setDrawerVisible(true)}
+                    onClick={() => setDrawerVisible(!drawerVisible)}
                     style={{ color: "white" }}
                 />
             </Header>
-
-            {/* Drawer para móvil */}
-            <Drawer
-                title="Menú"
-                placement="right"
-                onClose={() => setDrawerVisible(false)}
-                open={drawerVisible}
-                className="menu-mobile"
-            >
-                <Menu mode="vertical" items={items} />
-            </Drawer>
             <Content style={{ padding: "40px 40px 0px 40px" }}>
                 <div
                     style={{
@@ -118,6 +115,7 @@ const LayoutComponent: React.FC = () => {
                         ))}
                     </Row>
                 </div>
+                <MonumentosList/>
             </Content>
             <Footer style={{ textAlign: "center" }}>
                 CyLTour ©{new Date().getFullYear()} Created by Carolina Alonso
