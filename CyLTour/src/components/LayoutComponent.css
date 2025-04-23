@@ -1,0 +1,20 @@
+/* Esconde menú horizontal en móvil */
+.menu-desktop {
+    display: flex;
+    background-color: #1EA5CA;
+  }
+  
+  .menu-mobile-btn {
+    display: none;
+  }
+  
+  @media (max-width: 768px) {
+    .menu-desktop {
+      display: none;
+    }
+  
+    .menu-mobile-btn {
+      display: block;
+    }
+  }
+  
