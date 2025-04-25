@@ -1,20 +1,52 @@
-/* Esconde menú horizontal en móvil */
-.menu-desktop {
-    display: block;
-    background-color: #1EA5CA;
-  }
-  
-  .menu-mobile-btn {
-    display: none;
-  }
-  
-  @media (max-width: 768px) {
-    .menu-desktop {
-      display: none;
-    }
-  
-    .menu-mobile-btn {
+/* LayoutComponent.css */
+
+.custom-header {
+  background: #fff;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.desktop-menu {
+  display: none;
+}
+
+.mobile-menu {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .desktop-menu {
       display: block;
-    }
   }
-  
+
+  .mobile-menu {
+      display: none;
+  }
+}
+
+.custom-content {
+  padding: 40px 40px 0px 40px;
+}
+
+.content-inner {
+  min-height: 280px;
+  min-width: 348px;
+  padding: 24px;
+}
+
+.card-col {
+  display: flex;
+  justify-content: center;
+}
+
+.custom-footer {
+  text-align: center;
+}
