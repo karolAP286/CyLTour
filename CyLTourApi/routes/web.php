@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\UsuarioController;
 use App\Http\Controllers\Api\ComentarioController;
 use App\Http\Controllers\Api\RespuestaController;
 
-Route::prefix('v1')->group(function () {
+Route::prefix('api/v1')->group(function () {
     Route::apiResource('roles', RoleController::class);
     Route::apiResource('usuarios', UsuarioController::class);
     Route::apiResource('comentarios', ComentarioController::class);

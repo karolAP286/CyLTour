@@ -4,6 +4,7 @@ import { MenuOutlined } from "@ant-design/icons";
 
 import CardsComponent from "./CardsComponent";
 import "./LayoutComponent.css";
+import ComentariosList from "./ComentariosList";
 
 const { useBreakpoint } = Grid;
 const { Header, Content, Footer } = Layout;
@@ -96,6 +97,7 @@ const LayoutComponent: React.FC = () => {
                         ))}
                     </Row>
                 </div>
+                <ComentariosList/>
             </Content>
 
             <Footer className="custom-footer">

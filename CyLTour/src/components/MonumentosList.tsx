@@ -12,6 +12,8 @@ function MonumentosList() {
            </li>
         )
     })
+
+    //https://analisis.datosabiertos.jcyl.es/api/explore/v2.1/catalog/datasets/relacion-monumentos/records?select=count(distinct%20poblacion_provincia)%20as%20cuenta_total%2C%20poblacion_provincia&group_by=poblacion_provincia
     useEffect(() => {
         fetch("https://analisis.datosabiertos.jcyl.es/api/explore/v2.1/catalog/datasets/relacion-monumentos/records?limit=100")
         .then((response)=>response.json())

@@ -6,6 +6,5 @@ import LayoutComponent from './components/LayoutComponent.tsx';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
      <LayoutComponent/> 
-    
   </StrictMode>,
 )
