@@ -5,26 +5,17 @@ import { MenuOutlined } from "@ant-design/icons";
 import CardsComponent from "./CardsComponent";
 import "./LayoutComponent.css";
 import ComentariosList from "./ComentariosList";
+import { useProvincias } from "../hooks/useProvincias";
 
 const { useBreakpoint } = Grid;
 const { Header, Content, Footer } = Layout;
 
 const LayoutComponent: React.FC = () => {
+    const provincias = useProvincias();
+
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
-
-    const provinciasCastillaLeon: string[] = [
-        "ávila",
-        "burgos",
-        "león",
-        "palencia",
-        "salamanca",
-        "segovia",
-        "soria",
-        "valladolid",
-        "zamora",
-    ];
 
     const [drawerOpen, setDrawerOpen] = useState(false);
     const items = [
@@ -54,7 +45,6 @@ const LayoutComponent: React.FC = () => {
                             onClose={() => setDrawerOpen(false)}
                             open={drawerOpen}
                         >
-                            {/* clave distinta para forzar remount */}
                             <Menu
                                 key="mobileMenu"
                                 mode="vertical"
@@ -64,11 +54,7 @@ const LayoutComponent: React.FC = () => {
                         </Drawer>
                     </>
                 ) : (
-                    <Menu
-                        key="desktopMenu" /* cambia este key al cambiar isMobile */
-                        mode="horizontal"
-                        items={items}
-                    />
+                    <Menu key="desktopMenu" mode="horizontal" items={items} />
                 )}
             </Header>
 
@@ -80,24 +66,28 @@ const LayoutComponent: React.FC = () => {
                         borderRadius: borderRadiusLG,
                     }}
                 >
-                    <Row gutter={[24, 24]} justify="space-around">
-                        {provinciasCastillaLeon.map((provincia) => (
-                            <Col
-                                key={provincia}
-                                xs={{ flex: "100%" }}
-                                sm={{ flex: "100%" }}
-                                md={{ flex: "100%" }}
-                                lg={{ flex: "50%" }}
-                                xl={{ flex: "33%" }}
-                                xxl={{ flex: "33%" }}
-                                className="card-col"
-                            >
-                                <CardsComponent title={provincia} />
-                            </Col>
-                        ))}
-                    </Row>
+                    {provincias.length === 0 ? (
+                        <p style={{ textAlign: "center" }}>
+                            Cargando provincias...
+                        </p>
+                    ) : (
+                        <Row gutter={[24, 24]} justify="space-around">
+                            {provincias.map((provincia) => (
+                                <Col
+                                    key={provincia}
+                                    xs={24}
+                                    sm={24}
+                                    md={12}
+                                    xl={8}
+                                    className="card-col"
+                                >
+                                    <CardsComponent title={provincia} />
+                                </Col>
+                            ))}
+                        </Row>
+                    )}
                 </div>
-                <ComentariosList/>
+                <ComentariosList />
             </Content>
 
             <Footer className="custom-footer">

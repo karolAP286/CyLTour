@@ -1,31 +1,32 @@
-import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getMonumentosPorProvincia } from "../services/datosAbiertosService";
 
-function MonumentosList() {
-    const [monumentos, setMonumentos] = useState([]);
-    const HTMLmonumentos = monumentos.map((monumento:any) => {
-        return (
-            <li key={monumento.identificador}>
-                <h2>{monumento.nombre}</h2>
-                <h3>{monumento.tipomonumento} - {monumento.clasificacion} - {monumento.tipoconstruccion}</h3>
-                <div dangerouslySetInnerHTML= {{__html: monumento.descripcion }} />
-                <h4>{monumento.poblacion_localidad} - {monumento.poblacion_municipio} - {monumento.poblacion_provincia} - {monumento.codigopostal}</h4>
-           </li>
-        )
-    })
+const MonumentosList: React.FC = () => {
+  const { nombre } = useParams();
+  const [monumentos, setMonumentos] = useState<any[]>([]);
 
-    //https://analisis.datosabiertos.jcyl.es/api/explore/v2.1/catalog/datasets/relacion-monumentos/records?select=count(distinct%20poblacion_provincia)%20as%20cuenta_total%2C%20poblacion_provincia&group_by=poblacion_provincia
-    useEffect(() => {
-        fetch("https://analisis.datosabiertos.jcyl.es/api/explore/v2.1/catalog/datasets/relacion-monumentos/records?limit=100")
-        .then((response)=>response.json())
-        .then((data) => {
-            setMonumentos(data.results);
-            console.log(data.results)
-        })
-    }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (nombre) {
+        const data = await getMonumentosPorProvincia(nombre);
+        setMonumentos(data);
+      }
+    };
 
-    return <ul className="monumentosList">
-        {HTMLmonumentos}
-    </ul>;
-}
+    fetchData();
+  }, [nombre]);
 
-export default MonumentosList
+  return (
+    <div style={{ padding: 24 }}>
+      <h2>Monumentos en {nombre}</h2>
+      <ul>
+        {monumentos.map((mon, idx) => (
+          <li key={idx}>{mon.nombre_monumento}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default MonumentosList;

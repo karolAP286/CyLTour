@@ -4,7 +4,7 @@ import { Comentario } from '../types/Comentario';
 import { Respuesta } from '../types/Respuesta';
 import { Rol } from '../types/Rol';
 
-const API_BASE_URL = 'http://localhost:8000/v1'; 
+const API_BASE_URL = 'http://localhost:8000/api/v1'; 
 
 const apiService = axios.create({
   baseURL: API_BASE_URL,
@@ -68,6 +68,21 @@ export const updateComentario = async (id: number, comentario: Partial<Comentari
 
 export const deleteComentario = async (id: number): Promise<void> => {
   await apiService.delete(`/comentarios/${id}`);
+};
+
+export const getComentariosAprobados = async (): Promise<Comentario[]> => {
+  const response = await apiService.get<Comentario[]>('/comentariosAprobados');
+  return response.data;
+};
+
+export const getComentariosRechazados = async (): Promise<Comentario[]> => {
+  const response = await apiService.get<Comentario[]>('/comentariosRechazados');
+  return response.data;
+};
+
+export const getComentariosPorMonumento = async (monumentoId: number): Promise<Comentario[]> => {
+  const response = await apiService.get<Comentario[]>(`/monumentos/${monumentoId}/comentarios`);
+  return response.data;
 };
 
 
