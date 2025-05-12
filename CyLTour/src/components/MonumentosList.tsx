@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import { getMonumentosPorProvincia } from "../services/datosAbiertosService";
 import type { PaginationProps } from "antd";
 import { Pagination } from "antd";
+
 const MonumentosList: React.FC = () => {
     const { nombre } = useParams();
     const [monumentos, setMonumentos] = useState<any[]>([]);
     const [pagina, setPagina] = useState<number>(1);
     const [numPaginas, setNumPaginas] = useState<number>(1);
+    
     const fetchData = async () => {
         if (nombre) {
             const data = await getMonumentosPorProvincia(nombre, pagina);
@@ -24,6 +26,7 @@ const MonumentosList: React.FC = () => {
     const onChange: PaginationProps["onChange"] = (page) => {
         setPagina(page);
     };
+
     return (
         <div style={{ padding: 24 }}>
             <h2>Monumentos en {nombre}</h2>
