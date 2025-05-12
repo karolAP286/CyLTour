@@ -5,6 +5,7 @@ import useMenuItems from '../hooks/useMenuItems';
 
 import "./LayoutComponent.css";
 import { Outlet, useNavigate } from "react-router-dom";
+import ComentariosList from "./ComentariosList";
 
 const { useBreakpoint } = Grid;
 const { Header, Content, Footer } = Layout;
@@ -72,6 +73,7 @@ const LayoutComponent: React.FC = () => {
                     }}
                 >
                     <Outlet />
+                    <ComentariosList/>
                 </div>
             </Content>
 
