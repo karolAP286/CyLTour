@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Drawer, Layout, Menu, theme, Grid } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
+import useMenuItems from '../hooks/useMenuItems';
 
 import "./LayoutComponent.css";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -16,11 +17,7 @@ const LayoutComponent: React.FC = () => {
     } = theme.useToken();
 
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const items = [
-        { key: "home", label: "Inicio", path: "/" },
-        { key: "about", label: "Acerca de", path: "/about" },
-        { key: "contact", label: "Contacto", path: "/contact" },
-    ];
+    const items = useMenuItems();
     const menuItems = items.map(({ key, label, path }) => ({
         key,
         label,
@@ -61,6 +58,7 @@ const LayoutComponent: React.FC = () => {
                         key="desktopMenu"
                         mode="horizontal"
                         items={menuItems}
+                        className="menu-custom"
                     />
                 )}
             </Header>
