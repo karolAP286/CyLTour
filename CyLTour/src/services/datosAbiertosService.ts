@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Provincia } from "../types/Provincia";
+import { Clasificacion } from "../types/Clasificacion";
 
 const datosAbiertosService = axios.create({
     baseURL:
@@ -19,19 +20,47 @@ export const getProvincia = async (): Promise<Provincia[]> => {
 
 export const getMonumentosPorProvincia = async (
     provincia: string,
-    pagina: number
+    clasificacion: string,
+    pagina: number 
 ) => {
-    const limite = pagina * 10;
+    const pag = pagina-1;
+    const limite = pag * 10;
     const response = await datosAbiertosService.get("", {
         params: {
             where: `poblacion_provincia="${provincia}"`,
+            refine: `clasificacion:"${clasificacion}"`,
             order_by: "identificador",
             limit: 10,
             offset: limite,
         },
     });
-
+    console.log(response.data)
     return response.data;
 };
+
+export const getClasificacion = async (provincia: string,): Promise<Clasificacion[]> => {
+    const response = await datosAbiertosService.get("", {
+        params: {
+            select: "count(identificador) as total_monumentos",
+            refine: `poblacion_provincia:"${provincia}"`,
+            group_by: "clasificacion",
+            order_by: "total_monumentos",
+        },
+    });
+
+    return response.data.results;
+};
+
+// servicios/datosAbiertosService.ts
+export const getMonumentoById = async (id: string) => {
+  const response = await datosAbiertosService.get("", {
+    params: {
+      refine: `identificador:"${id}"`,
+      limit: 1,
+    },
+  });
+  return response.data.results[0]; 
+};
+
 
 export default datosAbiertosService;

@@ -1,18 +1,28 @@
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getMonumentosPorProvincia } from "../services/datosAbiertosService";
 import type { PaginationProps } from "antd";
 import { Pagination } from "antd";
+import { useNavigate } from "react-router-dom";
 
-const MonumentosList: React.FC = () => {
-    const { nombre } = useParams();
+interface monumentosProps {
+    provincia: string;
+    clasificacion: string;
+}
+
+const MonumentosList: React.FC<monumentosProps> = (props: monumentosProps) => {
+    const { provincia, clasificacion } = props;
+    const navigate = useNavigate();
     const [monumentos, setMonumentos] = useState<any[]>([]);
     const [pagina, setPagina] = useState<number>(1);
     const [numPaginas, setNumPaginas] = useState<number>(1);
-    
+
     const fetchData = async () => {
-        if (nombre) {
-            const data = await getMonumentosPorProvincia(nombre, pagina);
+        if (provincia && clasificacion) {
+            const data = await getMonumentosPorProvincia(
+                provincia,
+                clasificacion,
+                pagina
+            );
             setMonumentos(data.results);
             const pagTotal: number = Math.round(data.total_count / 10);
             setNumPaginas(pagTotal);
@@ -21,18 +31,28 @@ const MonumentosList: React.FC = () => {
 
     useEffect(() => {
         fetchData();
-    }, [nombre, pagina]);
+    }, [provincia, pagina, clasificacion]);
 
     const onChange: PaginationProps["onChange"] = (page) => {
         setPagina(page);
     };
 
+    const handleClick = (id: number) => {
+        if (provincia) {
+            navigate(`/provincia/${provincia}/${id}`);
+        }
+    };
+
     return (
-        <div style={{ padding: 24 }}>
-            <h2>Monumentos en {nombre}</h2>
-            <ul>
+        <div style={{ padding: 0 }}>
+            <ul style={{ margin: 0, paddingLeft: 24 }}>
                 {monumentos.map((mon, idx) => (
-                    <li key={idx}>{mon.nombre}</li>
+                    <li
+                        key={idx}
+                        onClick={() => handleClick(mon.identificador)}
+                    >
+                        {mon.nombre}
+                    </li>
                 ))}
             </ul>
             <Pagination

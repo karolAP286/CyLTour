@@ -12,7 +12,6 @@ const { Header, Content, Footer } = Layout;
 
 const LayoutComponent: React.FC = () => {
     const navigate = useNavigate();
-
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
@@ -24,7 +23,6 @@ const LayoutComponent: React.FC = () => {
         label,
         onClick: () => navigate(path),
     }));
-
     const screens = useBreakpoint();
     const isMobile = !screens.md;
 
