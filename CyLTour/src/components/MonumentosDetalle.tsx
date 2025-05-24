@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { getMonumentoById } from "../services/datosAbiertosService";
 import { Card, Spin, Alert } from "antd";
 import MapaEmbed from "./MapaEmbed";
+import ComentariosList from "./ComentariosList";
 
 const MonumentoDetalle = () => {
     const { id } = useParams<{ id: string }>();
@@ -34,34 +35,62 @@ const MonumentoDetalle = () => {
 
     return (
         <Card title={monumento.nombre} style={{ margin: "24px" }}>
-            <p>
-                <strong>Clasificación:</strong> {monumento.clasificacion}
-            </p>
-            <p>
-                <strong>Tipo:</strong> {monumento.tipomonumento}
-            </p>
-            <p>
-                <strong>Tipo de Construcción:</strong>{" "}
-                {monumento.tipoconstruccion?.join(", ")}
-            </p>
-            <p>
-                <strong>Períodos históricos:</strong>{" "}
-                {monumento.periodohistorico?.join(", ")}
-            </p>
-            <p>
-                <strong>Código Postal:</strong> {monumento.codigopostal}
-            </p>
-            <p>
-                <strong>Ubicación:</strong> {monumento.poblacion_localidad},{" "}
-                {monumento.poblacion_municipio} ({monumento.poblacion_provincia}
-                )
-            </p>
-            <div dangerouslySetInnerHTML={{ __html: monumento.descripcion }} />
-            
-            <MapaEmbed
-                lat={parseFloat(monumento.coordenadas_latitud)}
-                lon={parseFloat(monumento.coordenadas_longitud)}
-            />
+            {monumento.clasificacion && (
+                <p>
+                    <strong>Clasificación:</strong> {monumento.clasificacion}
+                </p>
+            )}
+            {monumento.tipomonumento && (
+                <p>
+                    <strong>Tipo:</strong> {monumento.tipomonumento}
+                </p>
+            )}
+            {monumento.tipoconstruccion?.length > 0 && (
+                <p>
+                    <strong>Tipo de Construcción:</strong>{" "}
+                    {monumento.tipoconstruccion.join(", ")}
+                </p>
+            )}
+            {monumento.periodohistorico?.length > 0 && (
+                <p>
+                    <strong>Períodos históricos:</strong>{" "}
+                    {monumento.periodohistorico.join(", ")}
+                </p>
+            )}
+            {monumento.codigopostal && (
+                <p>
+                    <strong>Código Postal:</strong> {monumento.codigopostal}
+                </p>
+            )}
+            {(monumento.poblacion_localidad ||
+                monumento.poblacion_municipio ||
+                monumento.poblacion_provincia) && (
+                <p>
+                    <strong>Ubicación:</strong>{" "}
+                    {[
+                        monumento.poblacion_localidad,
+                        monumento.poblacion_municipio,
+                    ]
+                        .filter(Boolean)
+                        .join(", ")}{" "}
+                    ({monumento.poblacion_provincia})
+                </p>
+            )}
+            {monumento.descripcion && (
+                <div
+                    dangerouslySetInnerHTML={{ __html: monumento.descripcion }}
+                />
+            )}
+            {monumento.coordenadas_latitud &&
+                monumento.coordenadas_longitud && (
+                    <MapaEmbed
+                        lat={parseFloat(monumento.coordenadas_latitud)}
+                        lon={parseFloat(monumento.coordenadas_longitud)}
+                    />
+                )}
+            <div style={{ margin: "2rem 0" }}>
+                <ComentariosList id={String(monumento.identificador)} />
+            </div>
         </Card>
     );
 };

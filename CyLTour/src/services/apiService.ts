@@ -3,6 +3,8 @@ import { Usuario } from "../types/Usuario";
 import { Comentario } from "../types/Comentario";
 import { Respuesta } from "../types/Respuesta";
 import { Rol } from "../types/Rol";
+import { LoginData } from "../types/LoginData";
+import { LoginResponse } from "../types/LoginResponse";
 
 const API_BASE_URL = "http://localhost:8000/api/v1";
 
@@ -100,7 +102,7 @@ export const getComentariosRechazados = async (): Promise<Comentario[]> => {
 };
 
 export const getComentariosPorMonumento = async (
-    monumentoId: number
+    monumentoId: string
 ): Promise<Comentario[]> => {
     const response = await apiService.get<Comentario[]>(
         `/monumentos/${monumentoId}/comentarios`
@@ -173,6 +175,16 @@ export const updateRol = async (
 
 export const deleteRol = async (id: number): Promise<void> => {
     await apiService.delete(`/roles/${id}`);
+};
+
+
+//
+// 👩‍💼 LOGIN
+//
+
+export const login = async (data: LoginData): Promise<LoginResponse> => {
+    const response = await apiService.post<LoginResponse>("/login", data);
+    return response.data;
 };
 
 export default apiService;

@@ -36,7 +36,7 @@ const useMenuItems = (): MenuItem[] => {
     if (!user) {
       items.push(
         { key: 'home', label: 'Inicio', path: '/' },
-        { key: 'login', label: 'Iniciar sesión', path: '/login' },
+        { key: 'login', label: 'Iniciar sesión', path: '/Login' },
         { key: 'register', label: 'Registrarse', path: '/register' }
       );
     } else {

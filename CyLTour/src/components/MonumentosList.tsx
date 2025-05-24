@@ -8,6 +8,9 @@ interface monumentosProps {
     provincia: string;
     clasificacion: string;
 }
+const PaginationStyle: React.CSSProperties = {
+    width: "100%",
+};
 
 const MonumentosList: React.FC<monumentosProps> = (props: monumentosProps) => {
     const { provincia, clasificacion } = props;
@@ -55,13 +58,16 @@ const MonumentosList: React.FC<monumentosProps> = (props: monumentosProps) => {
                     </li>
                 ))}
             </ul>
-            <Pagination
-                current={pagina}
-                onChange={onChange}
-                total={numPaginas * 10}
-                defaultCurrent={pagina}
-                showSizeChanger={false}
-            />
+            <div style={{ textAlign: "center", marginTop: "2rem", display: "flex", justifyContent:"space-around" }}>
+                <Pagination
+                    current={pagina}
+                    onChange={onChange}
+                    total={numPaginas * 10}
+                    defaultCurrent={pagina}
+                    showSizeChanger={false}
+                    style={PaginationStyle}
+                />
+            </div>
         </div>
     );
 };

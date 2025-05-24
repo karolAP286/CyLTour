@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Comentario;
+use App\Models\Usuario;
+use Illuminate\Support\Facades\Hash;
 
 class ConsultaController extends Controller
 {
@@ -37,5 +39,20 @@ class ConsultaController extends Controller
             ->get();
 
         return response()->json($comentarios);
+    }
+    public function login(Request $request)
+    {
+        $request->validate([
+            'correo' => 'required|email',
+            'contraseña' => 'required|string'
+        ]);
+
+        $usuario = Usuario::where('correo', $request->correo)->first();
+
+        if ($usuario && Hash::check($request->contraseña, $usuario->contraseña)) {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false], 401);
+        }
     }
 }

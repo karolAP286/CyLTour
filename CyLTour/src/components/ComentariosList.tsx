@@ -1,19 +1,23 @@
 import { useEffect, useState } from 'react';
 import { Card, Rate, Spin, Empty } from 'antd';
 import { Comentario } from '../types/Comentario';
-import { getComentarios } from '../services/apiService';
+import { getComentariosPorMonumento } from '../services/apiService';
 import { motion } from 'framer-motion';
 
 const { Meta } = Card;
+type ComentariosListProps = {
+  id: string;
+};
 
-const ComentariosList = () => {
+const ComentariosList:React.FC<ComentariosListProps> = (props: ComentariosListProps) => {
+  const {id}  = props;
   const [comentarios, setComentarios] = useState<Comentario[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchComentarios = async () => {
       try {
-        const data = await getComentarios();
+        const data = await getComentariosPorMonumento(id);
         setComentarios(data);
       } catch (error) {
         console.error('Error fetching comentarios:', error);

@@ -15,4 +15,5 @@ Route::prefix('api/v1')->group(function () {
     Route::get('monumentos/{id}/comentarios', [ConsultaController::class, 'comentariosPorMonumento']);
     Route::get('comentariosAprobados', [ConsultaController::class, 'comentariosAprobados']);
     Route::get('comentariosRechazados', [ConsultaController::class, 'comentariosRechazados']);
+    Route::post('/login', [ConsultaController::class, 'login']);
 });
