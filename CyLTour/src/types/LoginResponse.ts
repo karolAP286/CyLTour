@@ -1,6 +1,7 @@
+import { Usuario } from "./Usuario";
+
 export interface LoginResponse {
-    access_token: string;
-    token_type: string;
-    expires_in: number;
-    usuario: any;
+    success: boolean;
+    user: Usuario;
+    token: string;
 }

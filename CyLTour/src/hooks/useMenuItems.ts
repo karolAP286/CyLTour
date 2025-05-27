@@ -1,60 +1,76 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 type MenuItem = {
-  key: string;
-  label: string;
-  path: string;
+    key: string;
+    label: string;
+    path: string;
 };
 
-type User = {
-  name: string;
-  isAdmin: boolean;
-};
-
-const decodeToken = (token: string): User | null => {
-  try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload as User;
-  } catch {
-    return null;
-  }
-};
+// Este hook se encarga de generar los elementos del menú según el estado de autenticación y el rol del usuario.
+// Ahora escucha un evento 'sessionChanged' para actualizar el menú dinámicamente.
 
 const useMenuItems = (): MenuItem[] => {
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+    const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+    const [updateFlag, setUpdateFlag] = useState(0);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    let user: User | null = null;
+    useEffect(() => {
+        const onSessionChanged = () => {
+            setUpdateFlag((f) => f + 1);
+        };
 
-    if (token) {
-      user = decodeToken(token);
-    }
+        window.addEventListener("sessionChanged", onSessionChanged);
 
-    const items: MenuItem[] = [];
+        return () => {
+            window.removeEventListener("sessionChanged", onSessionChanged);
+        };
+    }, []);
 
-    if (!user) {
-      items.push(
-        { key: 'home', label: 'Inicio', path: '/' },
-        { key: 'login', label: 'Iniciar sesión', path: '/Login' },
-        { key: 'register', label: 'Registrarse', path: '/register' }
-      );
-    } else {
-      items.push(
-        { key: 'home', label: 'Inicio', path: '/' },
-        { key: 'profile', label: 'Perfil', path: '/profile' },
-        { key: 'logout', label: 'Cerrar sesión', path: '/logout' }
-      );
+    useEffect(() => {
+        const token = localStorage.getItem("tokenCYLTour");
+        const encodedRol = localStorage.getItem("rol_id");
 
-      if (user.isAdmin) {
-        items.push({ key: 'admin', label: 'Panel de admin', path: '/admin' });
-      }
-    }
+        let isAdmin = false;
 
-    setMenuItems(items);
-  }, []);
+        if (token && encodedRol) {
+            try {
+                const decodedRol = atob(encodedRol); // Decodifica desde Base64
 
-  return menuItems;
+                if (decodedRol === "1") {
+                    isAdmin = true;
+                }
+            } catch (error) {
+                console.error("Error al decodificar el rol_id", error);
+            }
+        }
+
+        const items: MenuItem[] = [];
+
+        if (!token) {
+            items.push(
+                { key: "home", label: "Inicio", path: "/" },
+                { key: "login", label: "Iniciar sesión", path: "/login" },
+                { key: "register", label: "Registrarse", path: "/register" }
+            );
+        } else {
+            items.push(
+                { key: "home", label: "Inicio", path: "/" },
+                { key: "profile", label: "Perfil", path: "/profile" },
+                { key: "logout", label: "Cerrar sesión", path: "/logout" }
+            );
+
+            if (isAdmin) {
+                items.push({
+                    key: "admin",
+                    label: "Panel de admin",
+                    path: "/admin",
+                });
+            }
+        }
+
+        setMenuItems(items);
+    }, [updateFlag]);
+
+    return menuItems;
 };
 
 export default useMenuItems;

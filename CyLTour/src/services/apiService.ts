@@ -5,8 +5,10 @@ import { Respuesta } from "../types/Respuesta";
 import { Rol } from "../types/Rol";
 import { LoginData } from "../types/LoginData";
 import { LoginResponse } from "../types/LoginResponse";
+import { ClearSession } from "../hooks/ClearSession";
+import { RegisterData } from "../types/RegisterData";
 
-const API_BASE_URL = "http://localhost:8000/api/v1";
+const API_BASE_URL = "http://localhost:8000/api/v2";
 
 const apiService = axios.create({
     baseURL: API_BASE_URL,
@@ -14,6 +16,20 @@ const apiService = axios.create({
         "Content-Type": "application/json",
     },
 });
+
+// Agregar interceptor para insertar el token en cada petición
+apiService.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem("tokenCYLTour");
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
 
 //
 // 🚀 USUARIOS
@@ -177,9 +193,8 @@ export const deleteRol = async (id: number): Promise<void> => {
     await apiService.delete(`/roles/${id}`);
 };
 
-
 //
-// 👩‍💼 LOGIN
+// 👩‍💼 LOGIN REGISTER LOGOUT
 //
 
 export const login = async (data: LoginData): Promise<LoginResponse> => {
@@ -187,4 +202,15 @@ export const login = async (data: LoginData): Promise<LoginResponse> => {
     return response.data;
 };
 
+export const logout = async () => {
+    const response = await apiService.post("/logout");
+    ClearSession(); // limpia localStorage, cookies, etc.
+    window.dispatchEvent(new Event("sessionChanged")); // Notifica al hook que cambió la sesión
+    return response;
+};
+
+export const register = async (data: RegisterData) => {
+    const response = await apiService.post("/register", data);
+    return response.data;
+};
 export default apiService;

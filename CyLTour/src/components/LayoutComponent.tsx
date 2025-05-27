@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Drawer, Layout, Menu, theme, Grid } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 import useMenuItems from '../hooks/useMenuItems';
+import useLogout from "../hooks/useLogout";
 
 import "./LayoutComponent.css";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -10,6 +11,7 @@ const { useBreakpoint } = Grid;
 const { Header, Content, Footer } = Layout;
 
 const LayoutComponent: React.FC = () => {
+    useLogout(); 
     const navigate = useNavigate();
     const {
         token: { colorBgContainer, borderRadiusLG },

@@ -19,11 +19,11 @@ class UsuarioController extends Controller
             'fecha_nacimiento' => 'required|date',
             'dni' => 'nullable|string|unique:usuarios,dni',
             'correo' => 'required|email|unique:usuarios,correo',
-            'contraseña' => 'required|string|min:6'
+            'password' => 'required|string|min:6'
         ]);
 
         $data = $request->all();
-        $data['contraseña'] = bcrypt($data['contraseña']);
+        $data['password'] = bcrypt($data['password']);
         return Usuario::create($data);
     }
 
@@ -33,7 +33,7 @@ class UsuarioController extends Controller
 
     public function update(Request $request, $id) {
         $usuario = Usuario::findOrFail($id);
-        $usuario->update($request->except('contraseña'));
+        $usuario->update($request->except('password'));
         return $usuario;
     }
 

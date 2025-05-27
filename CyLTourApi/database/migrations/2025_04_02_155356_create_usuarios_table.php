@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('fecha_nacimiento');
             $table->string('dni')->unique();
             $table->string('correo')->unique();
-            $table->string('contraseña');
+            $table->string('password');
             $table->timestamps();
         });
     }

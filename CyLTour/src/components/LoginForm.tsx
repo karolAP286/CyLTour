@@ -1,20 +1,34 @@
 import React, { useState } from "react";
-import { Button, Form, Input, Card, message } from "antd";
+import { useNavigate } from "react-router-dom";
+import { Button, Form, Input, Card, Alert } from "antd";
 import { login } from "../services/apiService";
+import { LoginData } from "../types/LoginData";
 
 const LoginForm: React.FC = () => {
     const [loading, setLoading] = useState(false);
-    const onFinish = async (values: any) => {
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const navigate = useNavigate();
+
+    const onFinish = async (values: LoginData) => {
         setLoading(true);
+        setErrorMessage(null);
+        setSuccessMessage(null);
+
         try {
             const response = await login(values);
-            localStorage.setItem("token", response.access_token);
-            message.success("Login exitoso");
-            // redirige o actualiza el estado
+            const rolId = response.user.rol_id;
+            const encodedRolId = btoa(String(rolId)); // codifica
+            localStorage.setItem("rol_id", encodedRolId);
+            localStorage.setItem("tokenCYLTour", response.token);
+            
+            setSuccessMessage("Login exitoso. Redirigiendo...");
+            setTimeout(() => {
+                window.dispatchEvent(new Event("sessionChanged"));
+                navigate("/");
+            }, 1500);
         } catch (error: any) {
-            message.error(
-                error.response?.data?.error || "Error al iniciar sesión"
-            );
+            setErrorMessage("Correo o contraseña incorrectos.");
         } finally {
             setLoading(false);
         }
@@ -26,9 +40,26 @@ const LoginForm: React.FC = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                height: "100vh",
             }}
         >
             <Card title="Iniciar Sesión" style={{ width: 300 }}>
+                {errorMessage && (
+                    <Alert
+                        message={errorMessage}
+                        type="error"
+                        showIcon
+                        style={{ marginBottom: 16 }}
+                    />
+                )}
+                {successMessage && (
+                    <Alert
+                        message={successMessage}
+                        type="success"
+                        showIcon
+                        style={{ marginBottom: 16 }}
+                    />
+                )}
                 <Form name="login" onFinish={onFinish} layout="vertical">
                     <Form.Item
                         label="Correo"
@@ -58,6 +89,7 @@ const LoginForm: React.FC = () => {
                             type="primary"
                             htmlType="submit"
                             loading={loading}
+                            block
                         >
                             Iniciar sesión
                         </Button>

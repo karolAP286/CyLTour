@@ -7,6 +7,7 @@ export interface Usuario {
   fecha_nacimiento: string;
   dni: string | null;
   correo: string;
+  password: string;
   created_at: string;
   updated_at: string | null;
   rol?: Rol;

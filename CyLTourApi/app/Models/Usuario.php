@@ -3,21 +3,31 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable; // CAMBIO CLAVE
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class Usuario extends Model
+class Usuario extends Authenticatable // CAMBIO CLAVE
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory, Notifiable;
 
     protected $table = 'usuarios';
+
     protected $fillable = [
-        'rol_id', 'nombre', 'fecha_nacimiento', 'dni', 'correo', 'contraseña'
+        'rol_id',
+        'nombre',
+        'fecha_nacimiento',
+        'dni',
+        'correo',
+        'password'
     ];
 
     protected $hidden = [
-        'contraseña'
+        'password',
+        'remember_token', // opcional si llegas a usarlo
     ];
 
+    // 🔁 Relaciones
     public function rol()
     {
         return $this->belongsTo(Role::class);
