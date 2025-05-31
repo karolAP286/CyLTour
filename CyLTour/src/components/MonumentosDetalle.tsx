@@ -27,7 +27,7 @@ const MonumentoDetalle = () => {
         fetchMonumento();
     }, [id]);
 
-    if (loading) return <Spin tip="Cargando monumento..." />;
+    if (loading) return <Spin size="large" />;
     if (error) return <Alert type="error" message={error} />;
 
     if (!monumento)
@@ -88,7 +88,7 @@ const MonumentoDetalle = () => {
                         lon={parseFloat(monumento.coordenadas_longitud)}
                     />
                 )}
-            <div style={{ margin: "2rem 0" }}>
+            <div style={{ margin: "2rem 0 1rem 0" }}>
                 <ComentariosList id={String(monumento.identificador)} />
             </div>
         </Card>

@@ -10,8 +10,17 @@ class Comentario extends Model
     use HasFactory;
 
     protected $table = 'comentarios';
+    protected $casts = [
+        'estado' => 'boolean',
+    ];
+
     protected $fillable = [
-        'puntuacion', 'contenido', 'url_imagen', 'usuario_id', 'monumento_id',
+        'puntuacion',
+        'contenido',
+        'url_imagen',
+        'usuario_id',
+        'monumento_id',
+        'estado',
     ];
 
     public function usuario()

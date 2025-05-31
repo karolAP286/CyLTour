@@ -15,17 +15,17 @@ class ComentarioController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $request->merge(['estado' => false]);
+        $validated = $request->validate([
             'puntuacion' => 'required|integer',
             'contenido' => 'nullable|string',
             'url_imagen' => 'nullable|string',
             'usuario_id' => 'required|exists:usuarios,id',
             'monumento_id' => 'required|integer',
+            'estado' => 'boolean',
         ]);
 
-        $data = $request->all();
-        $data['estado'] = false;
-        return Comentario::create($data);
+        return Comentario::create($validated);
     }
 
 

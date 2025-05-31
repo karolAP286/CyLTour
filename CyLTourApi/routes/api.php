@@ -15,6 +15,7 @@ Route::prefix('v2')->group(function () {
     Route::apiResource('comentarios', ComentarioController::class);
     Route::apiResource('respuestas', RespuestaController::class);
     
+    
     // Rutas protegidas con Sanctum
     Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('roles', RoleController::class);

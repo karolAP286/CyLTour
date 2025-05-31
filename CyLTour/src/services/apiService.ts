@@ -5,8 +5,8 @@ import { Respuesta } from "../types/Respuesta";
 import { Rol } from "../types/Rol";
 import { LoginData } from "../types/LoginData";
 import { LoginResponse } from "../types/LoginResponse";
-import { ClearSession } from "../hooks/ClearSession";
 import { RegisterData } from "../types/RegisterData";
+import { ClearSession } from "../hooks/ClearSession";
 
 const API_BASE_URL = "http://localhost:8000/api/v2";
 
@@ -203,10 +203,27 @@ export const login = async (data: LoginData): Promise<LoginResponse> => {
 };
 
 export const logout = async () => {
-    const response = await apiService.post("/logout");
-    ClearSession(); // limpia localStorage, cookies, etc.
-    window.dispatchEvent(new Event("sessionChanged")); // Notifica al hook que cambió la sesión
-    return response;
+    let message = "Sesión cerrada correctamente."; // Valor por defecto
+
+    try {
+        const response = await apiService.post("/logout");
+        message = response.data?.message || message;
+    } catch (err: any) {
+        if (err.response?.status === 401) {
+            // Token inválido o ya expirado — lo consideramos logout igualmente
+            console.warn("Token inválido o expirado, cerrando sesión local.");
+            message = "Sesión expirada. Has sido desconectado.";
+        } else {
+            // Otro error: lo reenviamos
+            throw err;
+        }
+    } finally {
+        ClearSession();
+        window.dispatchEvent(new Event("sessionChanged"));
+    }
+
+    // ✅ Devuelve un objeto consistente con mensaje
+    return { success: true, message };
 };
 
 export const register = async (data: RegisterData) => {

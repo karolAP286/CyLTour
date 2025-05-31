@@ -1,5 +1,16 @@
 import { useEffect, useState } from "react";
-import { Card, Rate, Spin, Empty, Input, Button, Form, message } from "antd";
+import {
+    Card,
+    Rate,
+    Spin,
+    Empty,
+    Input,
+    Button,
+    Form,
+    message,
+    Alert,
+    Typography,
+} from "antd";
 import { Comentario } from "../types/Comentario";
 import {
     createComentario,
@@ -11,6 +22,7 @@ import { Respuesta } from "../types/Respuesta";
 
 const { Meta } = Card;
 const { TextArea } = Input;
+const { Title } = Typography;
 
 type ComentariosListProps = {
     id: string;
@@ -21,12 +33,14 @@ const ComentariosList: React.FC<ComentariosListProps> = ({ id }) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [comentarioForm] = Form.useForm();
     const [respuestaForm] = Form.useForm();
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [respondiendoA, setRespondiendoA] = useState<number | null>(null);
     const [respuestasVisibles, setRespuestasVisibles] = useState<{
         [comentarioId: number]: boolean;
     }>({});
-
-    const usuarioId = parseInt(localStorage.getItem("usuario_id") || "0");
+    const decodedUser = atob(localStorage.getItem("user_id") || "0");
+    const usuarioId = parseInt(decodedUser);
 
     const fetchComentarios = async () => {
         try {
@@ -44,23 +58,29 @@ const ComentariosList: React.FC<ComentariosListProps> = ({ id }) => {
     }, []);
 
     const onFinishComentario = async (values: any) => {
+        if (!usuarioId) {
+            setErrorMessage("Debes estar autenticado para comentar.");
+            return;
+        }
+        const dataToSend = {
+            ...values,
+            usuario_id: usuarioId,
+            monumento_id: parseInt(id),
+            url_imagen: null,
+        };
         try {
-            await createComentario({
-                ...values,
-                usuario_id: usuarioId,
-                monumento_id: parseInt(id),
-            });
-            message.success("Comentario enviado");
+            await createComentario(dataToSend);
+            setSuccessMessage("Comentario enviado, esperando aprobación");
             comentarioForm.resetFields();
             fetchComentarios();
         } catch (err) {
-            message.error("Error al enviar comentario");
+            setErrorMessage("Error al enviar comentario");
         }
     };
 
     const onFinishRespuesta = async (values: any) => {
         if (!usuarioId) {
-            message.warning("Debes estar autenticado para responder.");
+            setErrorMessage("Debes estar autenticado para responder.");
             return;
         }
         try {
@@ -69,7 +89,7 @@ const ComentariosList: React.FC<ComentariosListProps> = ({ id }) => {
                 comentario_id: respondiendoA!,
                 usuario_id: usuarioId,
             });
-            message.success("Respuesta enviada");
+            setSuccessMessage("Respuesta enviada");
             respuestaForm.resetFields();
             setRespondiendoA(null);
             fetchComentarios();
@@ -95,35 +115,27 @@ const ComentariosList: React.FC<ComentariosListProps> = ({ id }) => {
 
     return (
         <div className="space-y-6 p-4">
-            <Form
-                form={comentarioForm}
-                onFinish={onFinishComentario}
-                layout="vertical"
-            >
-                <Form.Item
-                    name="contenido"
-                    label="Deja un comentario"
-                    rules={[{ required: true }]}
-                >
-                    <TextArea rows={3} />
-                </Form.Item>
-                <Form.Item
-                    name="puntuacion"
-                    label="Puntuación"
-                    rules={[{ required: true }]}
-                >
-                    <Rate />
-                </Form.Item>
-                <Button type="primary" htmlType="submit">
-                    Enviar comentario
-                </Button>
-            </Form>
-            <br></br>
-
+            {errorMessage && (
+                <Alert
+                    message={errorMessage}
+                    type="warning"
+                    showIcon
+                    style={{ marginBottom: 16 }}
+                />
+            )}
+            {successMessage && (
+                <Alert
+                    message={successMessage}
+                    type="success"
+                    showIcon
+                    style={{ marginBottom: 16 }}
+                />
+            )}
             {comentarios.length === 0 ? (
                 <Empty description="No hay comentarios disponibles" />
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <Title level={5}>Comentarios:</Title>
                     {comentarios.map((comentario) => (
                         <motion.div
                             key={comentario.id}
@@ -152,6 +164,7 @@ const ComentariosList: React.FC<ComentariosListProps> = ({ id }) => {
                                                     "Usuario"}
                                             </span>
                                             <Rate
+                                                style={{ marginLeft: "10px" }}
                                                 disabled
                                                 value={comentario.puntuacion}
                                             />
@@ -181,11 +194,18 @@ const ComentariosList: React.FC<ComentariosListProps> = ({ id }) => {
                                                     type="link"
                                                     onClick={() =>
                                                         setRespondiendoA(
-                                                            comentario.id
+                                                            (prev) =>
+                                                                prev ===
+                                                                comentario.id
+                                                                    ? null
+                                                                    : comentario.id
                                                         )
                                                     }
                                                 >
-                                                    Responder
+                                                    {respondiendoA ===
+                                                    comentario.id
+                                                        ? "Cancelar"
+                                                        : "Responder"}
                                                 </Button>
                                             </div>
 
@@ -195,6 +215,10 @@ const ComentariosList: React.FC<ComentariosListProps> = ({ id }) => {
                                                 comentario.respuestas?.map(
                                                     (r: Respuesta) => (
                                                         <div
+                                                            style={{
+                                                                marginTop:
+                                                                    "8px",
+                                                            }}
                                                             key={r.created_at}
                                                             className="mt-2 ml-4 p-2 bg-gray-100 rounded"
                                                         >
@@ -212,6 +236,7 @@ const ComentariosList: React.FC<ComentariosListProps> = ({ id }) => {
                                             {respondiendoA ===
                                                 comentario.id && (
                                                 <Form
+                                                    style={{ marginTop: "8px" }}
                                                     form={respuestaForm}
                                                     onFinish={onFinishRespuesta}
                                                     layout="vertical"
@@ -244,6 +269,30 @@ const ComentariosList: React.FC<ComentariosListProps> = ({ id }) => {
                     ))}
                 </div>
             )}
+            <Form
+                style={{ marginTop: "24px" }}
+                form={comentarioForm}
+                onFinish={onFinishComentario}
+                layout="vertical"
+            >
+                <Form.Item
+                    name="contenido"
+                    label="Deja un comentario"
+                    rules={[{ required: true }]}
+                >
+                    <TextArea rows={3} />
+                </Form.Item>
+                <Form.Item
+                    name="puntuacion"
+                    label="Puntuación"
+                    rules={[{ required: true }]}
+                >
+                    <Rate />
+                </Form.Item>
+                <Button type="primary" htmlType="submit">
+                    Enviar comentario
+                </Button>
+            </Form>
         </div>
     );
 };
