@@ -20,6 +20,7 @@ const LoginForm: React.FC = () => {
             const rolId = response.user.rol_id;
             const encodedRolId = btoa(String(rolId)); // codifica
             localStorage.setItem("rol_id", encodedRolId);
+            localStorage.setItem("user_id", btoa(String(response.user.id)));
             localStorage.setItem("tokenCYLTour", response.token);
             
             setSuccessMessage("Login exitoso. Redirigiendo...");

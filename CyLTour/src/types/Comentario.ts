@@ -1,3 +1,4 @@
+import { Respuesta } from './Respuesta';
 import { Usuario } from './Usuario';
 
 export interface Comentario {
@@ -8,9 +9,9 @@ export interface Comentario {
   usuario_id: number;
   estado: boolean;
   monumento_id: number;
-  respuesta: boolean;
   created_at: string;
   updated_at: string | null;
   usuario: Usuario; 
+  respuestas?: Respuesta[];
 }
   

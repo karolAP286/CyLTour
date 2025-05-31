@@ -12,6 +12,7 @@ const AppRoutes = () => (
             <Route index element={<IndexComponent />} />
             <Route path="/Login" element={<LoginForm />} />
             <Route path="/register" element={<RegisterForm />} />
+            <Route path="/admin" element={<RegisterForm />} />
             <Route
                 path="/provincia/:nombre"
                 element={<CardsClasificacion />}

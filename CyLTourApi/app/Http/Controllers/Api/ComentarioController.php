@@ -8,35 +8,41 @@ use App\Models\Comentario;
 
 class ComentarioController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         return Comentario::with("usuario")->get();
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $request->validate([
             'puntuacion' => 'required|integer',
             'contenido' => 'nullable|string',
             'url_imagen' => 'nullable|string',
             'usuario_id' => 'required|exists:usuarios,id',
-            'estado' => 'required|boolean',
             'monumento_id' => 'required|integer',
-            'respuesta' => 'nullable|boolean'
         ]);
 
-        return Comentario::create($request->all());
+        $data = $request->all();
+        $data['estado'] = false;
+        return Comentario::create($data);
     }
 
-    public function show($id) {
+
+    public function show($id)
+    {
         return Comentario::findOrFail($id);
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $comentario = Comentario::findOrFail($id);
         $comentario->update($request->all());
         return $comentario;
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         Comentario::destroy($id);
         return response(null, 204);
     }

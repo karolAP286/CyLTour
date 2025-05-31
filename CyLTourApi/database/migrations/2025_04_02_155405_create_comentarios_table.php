@@ -15,7 +15,6 @@ return new class extends Migration
             $table->foreignId('usuario_id')->constrained('usuarios')->onDelete('cascade');
             $table->boolean('estado');
             $table->integer('monumento_id');
-            $table->boolean('respuesta')->nullable();
             $table->timestamps();
         });
     }
