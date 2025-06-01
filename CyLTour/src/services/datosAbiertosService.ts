@@ -51,7 +51,6 @@ export const getClasificacion = async (provincia: string,): Promise<Clasificacio
     return response.data.results;
 };
 
-// servicios/datosAbiertosService.ts
 export const getMonumentoById = async (id: string) => {
   const response = await datosAbiertosService.get("", {
     params: {
@@ -62,5 +61,13 @@ export const getMonumentoById = async (id: string) => {
   return response.data.results[0]; 
 };
 
+export const getMonumentos = async () => {
+  const response = await datosAbiertosService.get("", {
+    params: {
+      group_by: `identificador`
+    },
+  });
+  return response.data; 
+};
 
 export default datosAbiertosService;

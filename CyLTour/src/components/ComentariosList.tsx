@@ -142,6 +142,7 @@ const ComentariosList: React.FC<ComentariosListProps> = ({ id }) => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
+                            style={{ marginBottom: "16px" }}
                         >
                             <Card
                                 hoverable
@@ -174,21 +175,26 @@ const ComentariosList: React.FC<ComentariosListProps> = ({ id }) => {
                                         <div>
                                             <p>{comentario.contenido}</p>
                                             <div className="flex gap-2 mt-2">
-                                                <Button
-                                                    size="small"
-                                                    type="link"
-                                                    onClick={() =>
-                                                        toggleRespuestas(
-                                                            comentario.id
-                                                        )
-                                                    }
-                                                >
-                                                    {respuestasVisibles[
-                                                        comentario.id
-                                                    ]
-                                                        ? "Ocultar respuestas"
-                                                        : "Ver respuestas"}
-                                                </Button>
+                                                {comentario.respuestas &&
+                                                    comentario.respuestas
+                                                        .length > 0 && (
+                                                        <Button
+                                                            size="small"
+                                                            type="link"
+                                                            onClick={() =>
+                                                                toggleRespuestas(
+                                                                    comentario.id
+                                                                )
+                                                            }
+                                                        >
+                                                            {respuestasVisibles[
+                                                                comentario.id
+                                                            ]
+                                                                ? "Ocultar respuestas"
+                                                                : `Ver respuestas (${comentario.respuestas.length})`}
+                                                        </Button>
+                                                    )}
+
                                                 <Button
                                                     size="small"
                                                     type="link"

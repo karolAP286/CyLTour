@@ -1,0 +1,25 @@
+.logoAdmin {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 16px;
+    text-align: center;
+    background-color: #001529;
+}
+
+.admin-header {
+    background-color: #001529;
+    color: white;
+    font-size: 20px;
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.admin-content {
+    margin: 16px;
+    padding: 24px;
+    background: #fff;
+    min-height: 280px;
+    overflow: auto;
+}
