@@ -11,6 +11,7 @@ import AdminPanel from "./components/AdminPanel";
 import ComentariosAdmin from "./components/admin/ComentariosAdmin";
 import DashboardAdmin from "./components/admin/DashboardAdmin";
 import UsuariosAdmin from "./components/admin/UsuariosAdmin";
+import QRCodesAdmin from "./components/admin/qrCodesAdmin";
 
 const AppRoutes = () => {
     const logoutMessage = useLogout();
@@ -39,6 +40,8 @@ const AppRoutes = () => {
                     <Route index element={<DashboardAdmin />} />
                     <Route path="usuarios" element={<UsuariosAdmin />} />
                     <Route path="comentarios" element={<ComentariosAdmin />} />
+                    <Route path="qr" element={<QRCodesAdmin />} />
+                    <Route path="*" element={<DashboardAdmin />} />
                 </Route>
             </Routes>
         </>

@@ -5,6 +5,7 @@ import {
     UserOutlined,
     FileTextOutlined,
     LogoutOutlined,
+    QrcodeOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
 import "./AdminPanel.css";
@@ -36,6 +37,12 @@ const AdminPanel = () => {
             onClick: () => navigate("/admin/comentarios"),
         },
         {
+            key: "/admin/qr",
+            icon: <QrcodeOutlined />,
+            label: "Códigos QR", // ⬅️ NUEVA SECCIÓN
+            onClick: () => navigate("/admin/qr"),
+        },
+        {
             key: "logout",
             icon: <LogoutOutlined />,
             label: "Cerrar sesión",
@@ -51,10 +58,12 @@ const AdminPanel = () => {
                 collapsible
                 collapsed={collapsed}
                 onCollapse={(value) => setCollapsed(value)}
-                breakpoint="md" 
-                onBreakpoint={(broken) => setCollapsed(broken)} 
+                breakpoint="md"
+                onBreakpoint={(broken) => setCollapsed(broken)}
             >
-                <div className="logoAdmin">{!collapsed ? "CyLTour Admin" : "CTA"}</div>
+                <div className="logoAdmin">
+                    {!collapsed ? "CyLTour Admin" : "CTA"}
+                </div>
                 <Menu
                     theme="dark"
                     mode="inline"

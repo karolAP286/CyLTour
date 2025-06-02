@@ -62,11 +62,7 @@ export const getMonumentoById = async (id: string) => {
 };
 
 export const getMonumentos = async () => {
-  const response = await datosAbiertosService.get("", {
-    params: {
-      group_by: `identificador`
-    },
-  });
+  const response = await datosAbiertosService.get("");
   return response.data; 
 };
 

@@ -8,8 +8,11 @@ import {
 import { Line } from "@ant-design/charts";
 import { dataAdmin } from "../../types/dataAdmin";
 import { useData } from "../../hooks/useData";
+import useAuthGuard from "../../hooks/useAuthGuard";
 
 const DashboardAdmin = () => {
+    useAuthGuard({ adminOnly: true });
+
     const dataAdmin: dataAdmin = useData();
 
     const chartData = [
