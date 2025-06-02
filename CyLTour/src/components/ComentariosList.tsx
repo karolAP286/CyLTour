@@ -39,8 +39,18 @@ const ComentariosList: React.FC<ComentariosListProps> = ({ id }) => {
     const [respuestasVisibles, setRespuestasVisibles] = useState<{
         [comentarioId: number]: boolean;
     }>({});
-    const decodedUser = atob(localStorage.getItem("user_id") || "0");
-    const usuarioId = parseInt(decodedUser);
+
+    let usuarioId: number | null = null;
+
+    try {
+        const encoded = localStorage.getItem("user_id");
+        if (encoded) {
+            const decodedUser = atob(encoded);
+            usuarioId = parseInt(decodedUser, 10);
+        }
+    } catch (err) {
+        console.warn("Valor inválido en localStorage user_id:", err);
+    }
 
     const fetchComentarios = async () => {
         try {

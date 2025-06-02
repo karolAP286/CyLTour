@@ -126,6 +126,13 @@ export const getComentariosPorMonumento = async (
     return response.data;
 };
 
+export const getComentariosUsuario = async (id:number): Promise<Comentario[]> => {
+    const response = await apiService.get<Comentario[]>(
+        `/comentariosUsuario/${id}`
+    );
+    return response.data;
+};
+
 //
 // 🚀 RESPUESTAS
 //
@@ -160,6 +167,13 @@ export const updateRespuesta = async (
 
 export const deleteRespuesta = async (id: number): Promise<void> => {
     await apiService.delete(`/respuestas/${id}`);
+};
+
+export const getRespuestasUsuario = async (id:number): Promise<Respuesta[]> => {
+    const response = await apiService.get<Respuesta[]>(
+        `/respuestasUsuario/${id}`
+    );
+    return response.data;
 };
 
 //

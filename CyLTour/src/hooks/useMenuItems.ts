@@ -54,7 +54,7 @@ const useMenuItems = (): MenuItem[] => {
         } else {
             items.push(
                 { key: "home", label: "Inicio", path: "/" },
-                { key: "profile", label: "Perfil", path: "/profile" },
+                { key: "profile", label: "Perfil", path: "/usuario" },
                 { key: "logout", label: "Cerrar sesión", path: "/logout" }
             );
 

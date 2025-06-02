@@ -14,14 +14,16 @@ Route::prefix('v2')->group(function () {
     Route::get('monumentos/{id}/comentarios', [ConsultaController::class, 'comentariosPorMonumento']);
     Route::apiResource('comentarios', ComentarioController::class);
     Route::apiResource('respuestas', RespuestaController::class);
-    
-    
+
+
     // Rutas protegidas con Sanctum
     Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('roles', RoleController::class);
         Route::apiResource('usuarios', UsuarioController::class);
         Route::get('comentariosRechazados', [ConsultaController::class, 'comentariosRechazados']);
         Route::get('comentariosAprobados', [ConsultaController::class, 'comentariosAprobados']);
+        Route::get('comentariosUsuario/{id}', [ConsultaController::class, 'comentariosPorUsuario']);
+        Route::get('respuestasUsuario/{id}', [ConsultaController::class, 'respuestasPorUsuario']);
         Route::post('logout', [ConsultaController::class, 'logout']);
     });
 });

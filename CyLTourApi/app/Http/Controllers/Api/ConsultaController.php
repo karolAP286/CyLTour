@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Comentario;
 use App\Models\Usuario;
+use App\Models\Respuesta;
 use Illuminate\Support\Facades\Hash;
 
 class ConsultaController extends Controller
@@ -86,4 +87,16 @@ class ConsultaController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Sesión cerrada correctamente.']);
     }
+    public function comentariosPorUsuario($id)
+    {
+        return Comentario::where('usuario_id', $id)->get();
+    }
+
+    public function respuestasPorUsuario($id)
+    {
+        return Respuesta::with('comentario')
+            ->where('usuario_id', $id)
+            ->get();
+    }
+
 }
