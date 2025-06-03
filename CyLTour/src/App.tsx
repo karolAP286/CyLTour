@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import LayoutComponent from "./components/LayoutComponent";
 import IndexComponent from "./components/IndexComponent";
-import CardsClasificacion from "./components/CardsClasificacion";
-import MonumentoDetalle from "./components/MonumentosDetalle";
+import CardsMonumentosList from "./components/monumentos/CardsMonumentosList";
+import MonumentoDetalle from "./components/monumentos/MonumentosDetalle";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 import LogoutHandler from "./components/LogoutHandle";
@@ -17,6 +17,7 @@ import PerfilUsuario from "./components/user/PerfilUsusario";
 import EditarPerfil from "./components/user/EditarPerfil";
 import MisComentarios from "./components/user/MisComentarios";
 import MisRespuestas from "./components/user/MisRespuestas";
+import '@ant-design/v5-patch-for-react-19';
 
 const AppRoutes = () => {
     const logoutMessage = useLogout();
@@ -32,7 +33,7 @@ const AppRoutes = () => {
                     <Route path="/logout" element={<LogoutHandler />} />
                     <Route
                         path="/provincia/:nombre"
-                        element={<CardsClasificacion />}
+                        element={<CardsMonumentosList />}
                     />
                     <Route
                         path="/provincia/:provincia/:id"

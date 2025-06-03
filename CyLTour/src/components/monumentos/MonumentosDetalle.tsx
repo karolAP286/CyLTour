@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getMonumentoById } from "../services/datosAbiertosService";
+import { getMonumentoById } from "../../services/datosAbiertosService";
 import { Card, Spin, Alert } from "antd";
 import MapaEmbed from "./MapaEmbed";
 import ComentariosList from "./ComentariosList";

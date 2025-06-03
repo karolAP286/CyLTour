@@ -2,14 +2,14 @@ import { Card, Row, Col } from "antd";
 import { useParams } from "react-router-dom";
 import MonumentosList from "./MonumentosList";
 
-import { useClasificacion } from "../hooks/useClasificacion";
+import { useClasificacion } from "../../hooks/useClasificacion";
 const CardStyle: React.CSSProperties = {
     width: "100%",
     minWidth: 300,
     maxWidth: 500,
 };
 
-const CardsClasificacion = () => {
+const CardsMonumentosList = () => {
     const { nombre } = useParams();
     const clasificaciones = useClasificacion(nombre!);
     return (
@@ -35,4 +35,4 @@ const CardsClasificacion = () => {
     );
 };
 
-export default CardsClasificacion;
+export default CardsMonumentosList;

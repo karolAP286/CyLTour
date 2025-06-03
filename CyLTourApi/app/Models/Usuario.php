@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable; // CAMBIO CLAVE
+use Illuminate\Foundation\Auth\User as Authenticatable; 
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Usuario extends Authenticatable // CAMBIO CLAVE
+class Usuario extends Authenticatable 
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -24,7 +24,7 @@ class Usuario extends Authenticatable // CAMBIO CLAVE
 
     protected $hidden = [
         'password',
-        'remember_token', // opcional si llegas a usarlo
+        'remember_token', 
     ];
 
     // 🔁 Relaciones

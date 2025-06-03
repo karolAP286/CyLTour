@@ -11,14 +11,14 @@ import {
     Alert,
     Typography,
 } from "antd";
-import { Comentario } from "../types/Comentario";
+import { Comentario } from "../../types/Comentario";
 import {
     createComentario,
     createRespuesta,
     getComentariosPorMonumento,
-} from "../services/apiService";
+} from "../../services/apiService";
 import { motion } from "framer-motion";
-import { Respuesta } from "../types/Respuesta";
+import { Respuesta } from "../../types/Respuesta";
 
 const { Meta } = Card;
 const { TextArea } = Input;

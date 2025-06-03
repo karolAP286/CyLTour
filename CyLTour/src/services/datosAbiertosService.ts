@@ -34,7 +34,6 @@ export const getMonumentosPorProvincia = async (
             offset: limite,
         },
     });
-    console.log(response.data)
     return response.data;
 };
 

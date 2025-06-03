@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getMonumentosPorProvincia } from "../services/datosAbiertosService";
+import { getMonumentosPorProvincia } from "../../services/datosAbiertosService";
 import type { PaginationProps } from "antd";
 import { Pagination, Spin, Empty } from "antd";
 import { useNavigate } from "react-router-dom";

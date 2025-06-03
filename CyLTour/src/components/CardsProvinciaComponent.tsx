@@ -14,7 +14,7 @@ interface provinciasProps {
     title: string;
 }
 
-const CardsComponent: React.FC<provinciasProps> = (props: provinciasProps) => {
+const CardsProvinciaComponent: React.FC<provinciasProps> = (props: provinciasProps) => {
     const { title } = props;
     const navigate = useNavigate();
 
@@ -42,4 +42,4 @@ const CardsComponent: React.FC<provinciasProps> = (props: provinciasProps) => {
     );
 };
 
-export default CardsComponent;
+export default CardsProvinciaComponent;

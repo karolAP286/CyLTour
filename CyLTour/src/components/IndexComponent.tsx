@@ -1,6 +1,6 @@
 import { useProvincias } from "../hooks/useProvincias";
 import { Row, Col } from "antd";
-import CardsComponent from "./CardsComponent";
+import CardsProvinciaComponent from "./CardsProvinciaComponent";
 
 function IndexComponent() {
     const provincias = useProvincias();
@@ -19,7 +19,7 @@ function IndexComponent() {
                             xl={8}
                             className="card-col"
                         >
-                            <CardsComponent title={provincia} />
+                            <CardsProvinciaComponent title={provincia} />
                         </Col>
                     ))}
                 </Row>

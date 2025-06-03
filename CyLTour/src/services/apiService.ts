@@ -62,6 +62,7 @@ export const updateUsuario = async (
 
 export const deleteUsuario = async (id: number): Promise<void> => {
     await apiService.delete(`/usuarios/${id}`);
+    ClearSession();
 };
 
 //
@@ -217,18 +218,16 @@ export const login = async (data: LoginData): Promise<LoginResponse> => {
 };
 
 export const logout = async () => {
-    let message = "Sesión cerrada correctamente."; // Valor por defecto
+    let message = "Sesión cerrada correctamente."; 
 
     try {
         const response = await apiService.post("/logout");
         message = response.data?.message || message;
     } catch (err: any) {
         if (err.response?.status === 401) {
-            // Token inválido o ya expirado — lo consideramos logout igualmente
             console.warn("Token inválido o expirado, cerrando sesión local.");
             message = "Sesión expirada. Has sido desconectado.";
         } else {
-            // Otro error: lo reenviamos
             throw err;
         }
     } finally {
@@ -236,7 +235,6 @@ export const logout = async () => {
         window.dispatchEvent(new Event("sessionChanged"));
     }
 
-    // ✅ Devuelve un objeto consistente con mensaje
     return { success: true, message };
 };
 

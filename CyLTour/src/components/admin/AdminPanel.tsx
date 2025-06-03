@@ -6,6 +6,8 @@ import {
     FileTextOutlined,
     LogoutOutlined,
     QrcodeOutlined,
+    SettingOutlined,
+    DashboardOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
 import "./AdminPanel.css";
@@ -18,9 +20,10 @@ const AdminPanel = () => {
     const [collapsed, setCollapsed] = useState(false);
 
     const menuItems = [
+        
         {
             key: "/admin",
-            icon: <HomeOutlined />,
+            icon: <DashboardOutlined />,
             label: "Dashboard",
             onClick: () => navigate("/admin"),
         },
@@ -39,8 +42,14 @@ const AdminPanel = () => {
         {
             key: "/admin/qr",
             icon: <QrcodeOutlined />,
-            label: "Códigos QR", // ⬅️ NUEVA SECCIÓN
+            label: "Códigos QR",
             onClick: () => navigate("/admin/qr"),
+        },
+        {
+            key: "/",
+            icon: <HomeOutlined />,
+            label: "Volver atrás",
+            onClick: () => navigate("/"),
         },
         {
             key: "logout",
@@ -62,8 +71,15 @@ const AdminPanel = () => {
                 onBreakpoint={(broken) => setCollapsed(broken)}
             >
                 <div className="logoAdmin">
-                    {!collapsed ? "CyLTour Admin" : "CTA"}
+                    {!collapsed ? (
+                        "CyLTour Admin"
+                    ) : (
+                        <SettingOutlined
+                            style={{ fontSize: 24, color: "#fff" }}
+                        />
+                    )}
                 </div>
+
                 <Menu
                     theme="dark"
                     mode="inline"
@@ -72,7 +88,9 @@ const AdminPanel = () => {
                 />
             </Sider>
             <Layout>
-                <Header className="admin-header">Panel de Administración</Header>
+                <Header className="admin-header">
+                    Panel de Administración
+                </Header>
                 <Content className="admin-content">
                     <Outlet />
                 </Content>
