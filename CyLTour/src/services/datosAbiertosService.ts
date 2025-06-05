@@ -21,9 +21,9 @@ export const getProvincia = async (): Promise<Provincia[]> => {
 export const getMonumentosPorProvincia = async (
     provincia: string,
     clasificacion: string,
-    pagina: number 
+    pagina: number
 ) => {
-    const pag = pagina-1;
+    const pag = pagina - 1;
     const limite = pag * 10;
     const response = await datosAbiertosService.get("", {
         params: {
@@ -37,7 +37,9 @@ export const getMonumentosPorProvincia = async (
     return response.data;
 };
 
-export const getClasificacion = async (provincia: string,): Promise<Clasificacion[]> => {
+export const getClasificacion = async (
+    provincia: string
+): Promise<Clasificacion[]> => {
     const response = await datosAbiertosService.get("", {
         params: {
             select: "count(identificador) as total_monumentos",
@@ -51,18 +53,18 @@ export const getClasificacion = async (provincia: string,): Promise<Clasificacio
 };
 
 export const getMonumentoById = async (id: string) => {
-  const response = await datosAbiertosService.get("", {
-    params: {
-      refine: `identificador:"${id}"`,
-      limit: 1,
-    },
-  });
-  return response.data.results[0]; 
+    const response = await datosAbiertosService.get("", {
+        params: {
+            refine: `identificador:"${id}"`,
+            limit: 1,
+        },
+    });
+    return response.data.results[0];
 };
 
 export const getMonumentos = async () => {
-  const response = await datosAbiertosService.get("");
-  return response.data; 
+    const response = await datosAbiertosService.get("");
+    return response.data;
 };
 
 export default datosAbiertosService;

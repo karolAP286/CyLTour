@@ -52,9 +52,10 @@ La aplicación estará disponible en [http://localhost:3000](http://localhost:30
 ## Variables de entorno
 
 Si necesitas cambiar la URL de la API, edita el valor en `.env`:
-```ts
-REACT_APP_API_BASE_URL = "http://localhost:8000/api/v2";
-```
+
+| **Name**                                 | **Description**        | **Default**                     |
+| ---------------------------------------- | ---------------------- | ------------------------------- |
+| **REACT_APP_API_BASE_URL**               | Url base para API      | "http://localhost:8000/api/v2"; |
 
 ---
 
