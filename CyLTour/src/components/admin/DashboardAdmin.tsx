@@ -1,4 +1,4 @@
-import { Card, Col, Row, Statistic } from "antd";
+import { Card, Col, Row, Spin, Statistic } from "antd";
 import {
     UserOutlined,
     FileTextOutlined,
@@ -7,13 +7,45 @@ import {
 } from "@ant-design/icons";
 import { Line } from "@ant-design/charts";
 import { dataAdmin } from "../../types/dataAdmin";
-import { useData } from "../../hooks/useData";
-import useAuthGuard from "../../hooks/useAuthGuard";
+import { useEffect, useState } from "react";
+import {
+    getUsuarios,
+    getComentariosRechazados,
+} from "../../services/apiService";
+import { getMonumentos } from "../../services/datosAbiertosService";
 
 const DashboardAdmin = () => {
-    useAuthGuard({ adminOnly: true });
+    const [dataAdmin, setData] = useState<dataAdmin>({
+        usuarios: 0,
+        monumentos: 0,
+        comentariosRechazados: 0,
+    });
+    const [loading, setLoading] = useState(true);
 
-    const dataAdmin: dataAdmin = useData();
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [usuariosData, monumentosData, comentariosData] =
+                    await Promise.all([
+                        getUsuarios(),
+                        getMonumentos(),
+                        getComentariosRechazados(),
+                    ]);
+
+                setData({
+                    usuarios: usuariosData.length,
+                    monumentos: monumentosData.total_count,
+                    comentariosRechazados: comentariosData.length,
+                });
+            } catch (error) {
+                console.error("Error al obtener datos del panel:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const chartData = [
         { month: "Enero", visitas: 200 },
@@ -31,6 +63,7 @@ const DashboardAdmin = () => {
         color: "#1677ff",
         height: 300,
     };
+
     const stats = [
         {
             title: "Usuarios registrados",
@@ -55,36 +88,43 @@ const DashboardAdmin = () => {
     ];
 
     return (
-        <div>
-            <Row gutter={[16, 16]}>
-                {stats.map((stat, index) => (
-                    <Col xs={24} sm={12} md={12} lg={6} key={index}>
-                        <Card
-                            styles={{
-                                body: {
-                                    height: 120,
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    justifyContent: "center",
-                                },
-                            }}
-                        >
-                            <Statistic
-                                title={stat.title}
-                                value={stat.value}
-                                prefix={stat.icon}
-                            />
-                        </Card>
-                    </Col>
-                ))}
-            </Row>
+    <div>
+        {loading ? (
+            <Spin spinning={loading} tip="Cargando datos..." fullscreen />
+        ) : (
+            <>
+                <Row gutter={[16, 16]}>
+                    {stats.map((stat, index) => (
+                        <Col xs={24} sm={12} md={12} lg={6} key={index}>
+                            <Card
+                                styles={{
+                                    body: {
+                                        height: 120,
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        justifyContent: "center",
+                                    },
+                                }}
+                            >
+                                <Statistic
+                                    title={stat.title}
+                                    value={stat.value}
+                                    prefix={stat.icon}
+                                />
+                            </Card>
+                        </Col>
+                    ))}
+                </Row>
 
-            <Card style={{ marginTop: 24 }}>
-                <h3>Visitas por mes</h3>
-                <Line {...config} />
-            </Card>
-        </div>
-    );
+                <Card style={{ marginTop: 24 }}>
+                    <h3>Visitas por mes</h3>
+                    <Line {...config} />
+                </Card>
+            </>
+        )}
+    </div>
+);
+
 };
 
 export default DashboardAdmin;

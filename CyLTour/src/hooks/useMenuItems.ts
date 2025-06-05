@@ -33,7 +33,7 @@ const useMenuItems = (): MenuItem[] => {
 
         if (token && encodedRol) {
             try {
-                const decodedRol = atob(encodedRol); // Decodifica desde Base64
+                const decodedRol = atob(encodedRol);
 
                 if (decodedRol === "1") {
                     isAdmin = true;

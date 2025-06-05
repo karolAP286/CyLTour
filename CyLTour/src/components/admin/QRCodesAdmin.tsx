@@ -35,11 +35,10 @@ const QRCodesAdmin = () => {
     const generarQRUrl = (monumento: Monumento) => {
         const baseUrl = "https://cyl-tour.vercel.app/provincia/";
         const fullUrl = `${baseUrl}${monumento.poblacion_provincia}/${monumento.identificador}`;
-        console.log("URL completa del QR:", fullUrl);
         return `http://api.qrserver.com/v1/create-qr-code/?data=${fullUrl}&size=300x300&bgcolor=ffffff`;
     };
 
-    if (loading) return <Spin tip="Cargando monumentos..." />;
+    if (loading) return <Spin tip="Cargando monumentos..." fullscreen/>;
 
     return (
         <div>
@@ -55,7 +54,7 @@ const QRCodesAdmin = () => {
                             lg={6}
                             key={monumento.identificador}
                         >
-                            <Card title={monumento.nombre} bordered hoverable>
+                            <Card title={monumento.nombre} variant="outlined" hoverable>
                                 <img
                                     src={qrUrl}
                                     alt={`QR de ${monumento.nombre}`}

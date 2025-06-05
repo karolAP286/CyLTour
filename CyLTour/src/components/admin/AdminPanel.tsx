@@ -11,10 +11,12 @@ import {
 } from "@ant-design/icons";
 import { useState } from "react";
 import "./AdminPanel.css";
+import useAuthGuard from "../../hooks/useAuthGuard";
 
 const { Header, Sider, Content } = Layout;
 
 const AdminPanel = () => {
+    useAuthGuard({ adminOnly: true });
     const navigate = useNavigate();
     const location = useLocation();
     const [collapsed, setCollapsed] = useState(false);

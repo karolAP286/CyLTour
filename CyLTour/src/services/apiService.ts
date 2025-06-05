@@ -219,7 +219,6 @@ export const login = async (data: LoginData): Promise<LoginResponse> => {
 
 export const logout = async () => {
     let message = "Sesión cerrada correctamente."; 
-
     try {
         const response = await apiService.post("/logout");
         message = response.data?.message || message;

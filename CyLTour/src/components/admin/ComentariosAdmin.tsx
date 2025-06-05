@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import { Button, Table, Tag, message } from "antd";
-import { getComentariosRechazados, updateComentario } from "../../services/apiService";
+import { InfoCircleOutlined } from "@ant-design/icons";
+import {
+    getComentariosRechazados,
+    updateComentario,
+} from "../../services/apiService";
 import { Comentario } from "../../types/Comentario";
 
 const ComentariosAdmin = () => {
     const [comentarios, setComentarios] = useState<Comentario[]>([]);
     const [loading, setLoading] = useState(false);
+    const [loadingTable, setLoadingTable] = useState(true);
 
     const fetchComentarios = async () => {
         try {
@@ -13,6 +18,8 @@ const ComentariosAdmin = () => {
             setComentarios(data);
         } catch (error) {
             console.error("Error al cargar comentarios:", error);
+        } finally {
+            setLoadingTable(false);
         }
     };
 
@@ -20,7 +27,10 @@ const ComentariosAdmin = () => {
         fetchComentarios();
     }, []);
 
-    const handleAprobarComentario = async (comentarioId: number, data:Comentario) => {
+    const handleAprobarComentario = async (
+        comentarioId: number,
+        data: Comentario
+    ) => {
         setLoading(true);
         try {
             await updateComentario(comentarioId, { ...data, estado: true });
@@ -79,7 +89,9 @@ const ComentariosAdmin = () => {
                 !record.estado ? (
                     <Button
                         type="primary"
-                        onClick={() => handleAprobarComentario(record.id, record)}
+                        onClick={() =>
+                            handleAprobarComentario(record.id, record)
+                        }
                         loading={loading}
                     >
                         Aprobar
@@ -91,7 +103,16 @@ const ComentariosAdmin = () => {
     return (
         <div>
             <h2>Comentarios Rechazados</h2>
-            <Table columns={columns} dataSource={comentarios} rowKey="id" />
+                <Table columns={columns} dataSource={comentarios} rowKey="id" loading={loadingTable} locale={{
+                    emptyText: loadingTable ? null : (
+                        <div style={{ textAlign: "center", padding: "20px" }}>
+                            <InfoCircleOutlined
+                                style={{ fontSize: 24, color: "#999" }}
+                            />
+                            <p style={{ marginTop: 8 }}>No hay comentarios</p>
+                        </div>
+                    ),
+                }}/>
         </div>
     );
 };

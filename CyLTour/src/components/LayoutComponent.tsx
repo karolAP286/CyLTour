@@ -28,7 +28,7 @@ const LayoutComponent: React.FC = () => {
     return (
         <Layout>
             <Header className="custom-header">
-                <div className="logo">MiSitio</div>
+                <div className="logo">CYLTour</div>
 
                 {isMobile ? (
                     <>

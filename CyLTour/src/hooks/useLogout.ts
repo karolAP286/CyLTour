@@ -23,7 +23,7 @@ const useLogout = () => {
         }
     }, [location.pathname, navigate]);
 
-    return contextHolder; // 👈 Muy importante para renderizar el mensaje
+    return contextHolder; 
 };
 
 export default useLogout;

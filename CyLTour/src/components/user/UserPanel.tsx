@@ -11,16 +11,17 @@ import {
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import { useState } from "react";
 import "./UserPanel.css";
+import useAuthGuard from "../../hooks/useAuthGuard";
 
 const { Header, Sider, Content } = Layout;
 
 const UserPanel = () => {
+    useAuthGuard();
     const navigate = useNavigate();
     const location = useLocation();
     const [collapsed, setCollapsed] = useState(false);
 
-    const menuItems = [
-        
+    const menuItems = [    
         {
             key: "/usuario",
             icon: <UserOutlined />,

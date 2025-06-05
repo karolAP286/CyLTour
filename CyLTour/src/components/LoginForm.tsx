@@ -41,7 +41,6 @@ const LoginForm: React.FC = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                height: "100vh",
             }}
         >
             <Card title="Iniciar Sesión" style={{ width: 300 }}>
