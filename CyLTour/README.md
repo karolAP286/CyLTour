@@ -1,54 +1,61 @@
-# React + TypeScript + Vite
+# CyLTour Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este es el frontend de CyLTour, una aplicación web desarrollada con **React**, **TypeScript** y **Vite**. Permite a los usuarios explorar monumentos, dejar comentarios, registrarse, iniciar sesión y gestionar su perfil. Incluye paneles de usuario y administración.
 
-Currently, two official plugins are available:
+## Requisitos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Node.js >= 18
+- npm >= 9 (o yarn/pnpm)
+- Acceso a la API backend de CyLTour (ver carpeta CyLTourApi)
 
-## Expanding the ESLint configuration
+## Instalación
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. Clona el repositorio o copia los archivos en tu entorno local.
+2. Instala las dependencias:
+    ```
+    npm install
+    ```
+3. (Opcional) Configura variables de entorno si tu API no está en `http://localhost:8000/api/v2`.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Uso en desarrollo
+
+Inicia el servidor de desarrollo con:
+```
+npm run dev
+```
+La aplicación estará disponible en [http://localhost:3000](http://localhost:3000).
+
+## Scripts principales
+
+- `npm run dev` — Inicia el servidor de desarrollo.
+- `npm run build` — Genera la versión de producción.
+- `npm run preview` — Previsualiza la build de producción.
+- `npm run lint` — Ejecuta ESLint.
+
+## Estructura del proyecto
+
+- `/src/components` — Componentes reutilizables (monumentos, usuario, admin, etc.)
+- `/src/services` — Servicios para consumir la API.
+- `/src/types` — Tipos TypeScript.
+- `/src/hooks` — Hooks personalizados.
+- `/public/img` — Imágenes de provincias.
+
+## Funcionalidades principales
+
+- **Exploración de monumentos** por provincia y detalle.
+- **Comentarios y respuestas** en monumentos.
+- **Registro e inicio de sesión** de usuarios.
+- **Gestión de perfil** y cambio de contraseña.
+- **Panel de usuario**: ver y editar perfil, comentarios y respuestas.
+- **Panel de administración**: gestión de usuarios, comentarios y generación de QR.
+
+## Variables de entorno
+
+Si necesitas cambiar la URL de la API, edita el valor en `.env`:
+```ts
+REACT_APP_API_BASE_URL = "http://localhost:8000/api/v2";
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+**CyLTour** — Proyecto de turismo cultural de Castilla y León.

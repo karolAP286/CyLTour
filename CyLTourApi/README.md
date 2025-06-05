@@ -1,66 +1,114 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# CyLTour API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This is the backend API for the CyLTour project, built with Laravel.
 
-## About Laravel
+## Requisitos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP >= 8.0
+- Composer
+- MySQL/MariaDB
+- XAMPP (opcional, para entorno local)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Instalación
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. Clona el repositorio o copia los archivos en tu servidor local.
+2. Instala las dependencias de PHP:
+    ```
+    composer install
+    ```
+3. Copia el archivo de entorno y configura tus variables:
+    ```
+    cp .env.example .env
+    ```
+4. Genera la clave de la aplicación:
+    ```
+    php artisan key:generate
+    ```
+5. Configura la conexión a la base de datos en el archivo `.env`.
+6. Ejecuta las migraciones:
+    ```
+    php artisan migrate
+    ```
 
-## Learning Laravel
+## Uso
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Inicia el servidor de desarrollo:
+    ```
+    php artisan serve
+    ```
+- La API estará disponible en `http://localhost:8000/api/v2`.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Endpoints de la API CyLTour
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Autenticación y usuarios
 
-## Laravel Sponsors
+| Método | Ruta                        | Descripción                        | Autenticación |
+|--------|-----------------------------|------------------------------------|---------------|
+| POST   | /api/v2/login               | Login de usuario                   | No            |
+| POST   | /api/v2/register            | Registro de usuario                | No            |
+| POST   | /api/v2/logout              | Cerrar sesión                      | Sí            |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Usuarios
 
-### Premium Partners
+| Método | Ruta                        | Descripción                        | Autenticación |
+|--------|-----------------------------|------------------------------------|---------------|
+| GET    | /api/v2/usuarios            | Listar usuarios                    | Sí            |
+| POST   | /api/v2/usuarios            | Crear usuario                      | Sí            |
+| GET    | /api/v2/usuarios/{id}       | Obtener usuario por ID             | Sí            |
+| PUT    | /api/v2/usuarios/{id}       | Actualizar usuario                 | Sí            |
+| DELETE | /api/v2/usuarios/{id}       | Eliminar usuario                   | Sí            |
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Roles
 
-## Contributing
+| Método | Ruta                        | Descripción                        | Autenticación |
+|--------|-----------------------------|------------------------------------|---------------|
+| GET    | /api/v2/roles               | Listar roles                       | Sí            |
+| POST   | /api/v2/roles               | Crear rol                          | Sí            |
+| GET    | /api/v2/roles/{id}          | Obtener rol por ID                 | Sí            |
+| PUT    | /api/v2/roles/{id}          | Actualizar rol                     | Sí            |
+| DELETE | /api/v2/roles/{id}          | Eliminar rol                       | Sí            |
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Comentarios
 
-## Code of Conduct
+| Método | Ruta                                      | Descripción                                 | Autenticación |
+|--------|-------------------------------------------|---------------------------------------------|---------------|
+| GET    | /api/v2/comentarios                       | Listar comentarios                          | No            |
+| POST   | /api/v2/comentarios                       | Crear comentario                            | Si            |
+| GET    | /api/v2/comentarios/{id}                  | Obtener comentario por ID                   | No            |
+| PUT    | /api/v2/comentarios/{id}                  | Actualizar comentario                       | Si            |
+| DELETE | /api/v2/comentarios/{id}                  | Eliminar comentario                         | Si            |
+| GET    | /api/v2/monumentos/{id}/comentarios       | Listar comentarios de un monumento          | No            |
+| GET    | /api/v2/comentariosAprobados              | Listar comentarios aprobados                | No            |
+| GET    | /api/v2/comentariosRechazados             | Listar comentarios rechazados               | Si            |
+| GET    | /api/v2/comentariosUsuario/{id}           | Listar comentarios de un usuario            | Si            |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Respuestas
 
-## Security Vulnerabilities
+| Método | Ruta                            | Descripción                        | Autenticación |
+|--------|---------------------------------|------------------------------------|---------------|
+| GET    | /api/v2/respuestas              | Listar respuestas                  | No            |
+| POST   | /api/v2/respuestas              | Crear respuesta                    | Si            |
+| GET    | /api/v2/respuestas/{id}         | Obtener respuesta por ID           | No            |
+| PUT    | /api/v2/respuestas/{id}         | Actualizar respuesta               | Si            |
+| DELETE | /api/v2/respuestas/{id}         | Eliminar respuesta                 | Si            |
+| GET    | /api/v2/respuestasUsuario/{id}  | Listar respuestas de un usuario    | Si            |
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+**Notas:**
+- Los endpoints marcados con "Sí" en autenticación requieren un token Bearer de Laravel Sanctum.
+- Los endpoints pueden cambiar según la configuración de tus controladores y middleware.
+- Las rutas están bajo el prefijo `/api/v2/`.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## Notas
+
+- Las rutas de la API están definidas en `routes/api.php`.
+- Las contraseñas se almacenan de forma segura usando bcrypt.
+- Para desarrollo local, puedes usar XAMPP y configurar la base de datos en `phpMyAdmin`.
+
+---
+
+**CyLTour API**  
+Desarrollado con Laravel

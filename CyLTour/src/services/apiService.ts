@@ -8,10 +8,8 @@ import { LoginResponse } from "../types/LoginResponse";
 import { RegisterData } from "../types/RegisterData";
 import { ClearSession } from "../hooks/ClearSession";
 
-const API_BASE_URL = "http://localhost:8000/api/v2";
-
 const apiService = axios.create({
-    baseURL: API_BASE_URL,
+    baseURL: process.env.REACT_APP_API_BASE_URL,
     headers: {
         "Content-Type": "application/json",
     },
