@@ -17,7 +17,9 @@ import PerfilUsuario from "./components/user/PerfilUsusario";
 import EditarPerfil from "./components/user/EditarPerfil";
 import MisComentarios from "./components/user/MisComentarios";
 import MisRespuestas from "./components/user/MisRespuestas";
-import '@ant-design/v5-patch-for-react-19';
+import "@ant-design/v5-patch-for-react-19";
+import Error404 from "./components/error/error404";
+import ServerDown from "./components/error/ServerDown";
 
 const AppRoutes = () => {
     const logoutMessage = useLogout();
@@ -41,6 +43,11 @@ const AppRoutes = () => {
                     />
                 </Route>
 
+                {/* Páginas de error */}
+                <Route path="/404" element={<Error404 />} />
+                <Route path="/server-error" element={<ServerDown />} />
+                <Route path="*" element={<Error404 />} />
+
                 {/* Rutas del Panel de Administración */}
                 <Route path="/admin" element={<AdminPanel />}>
                     <Route index element={<DashboardAdmin />} />
@@ -49,6 +56,7 @@ const AppRoutes = () => {
                     <Route path="qr" element={<QRCodesAdmin />} />
                     <Route path="*" element={<DashboardAdmin />} />
                 </Route>
+                
                 {/* Rutas del Panel de Usuario */}
                 <Route path="/usuario" element={<UserPanel />}>
                     <Route index element={<PerfilUsuario />} />

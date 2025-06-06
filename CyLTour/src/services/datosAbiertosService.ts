@@ -7,6 +7,29 @@ const datosAbiertosService = axios.create({
         "https://analisis.datosabiertos.jcyl.es/api/explore/v2.1/catalog/datasets/relacion-monumentos/records?",
 });
 
+
+// Interceptor para manejo de errores globales
+datosAbiertosService.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (!error.response) {
+            // Error de red o servidor no disponible
+            console.error("Servidor no disponible.");
+            window.location.href = "/server-error";
+        } else {
+            const status = error.response.status;
+
+            if (status === 404) {
+                window.location.href = "/404";
+            } else if (status >= 500 || status === 0) {
+                window.location.href = "/server-error";
+            }
+        }
+
+        return Promise.reject(error);
+    }
+);
+
 export const getProvincia = async (): Promise<Provincia[]> => {
     const response = await datosAbiertosService.get("", {
         params: {

@@ -93,6 +93,15 @@ CyLTour/
 
 ---
 
+## Enlaces útiles
+
+- [Documentación Backend/API](./CyLTourApi/README.md)
+- [Documentación Frontend](./CyLTour/README.md)
+- [Endpoints de la API](./CyLTourApi/README.md#endpoints-de-usuario)
+- [Repositorio en GitHub](https://github.com/karolAP286/CyLTour)
+
+---
+
 ## Endpoints principales
 
 Consulta la documentación detallada de endpoints en [`CyLTourApi/README.md`](./CyLTourApi/README.md).

@@ -9,7 +9,7 @@ import { RegisterData } from "../types/RegisterData";
 import { ClearSession } from "../hooks/ClearSession";
 
 const apiService = axios.create({
-    baseURL: process.env.REACT_APP_API_BASE_URL,
+    baseURL: import.meta.env.VITE_API_BASE_URL,
     headers: {
         "Content-Type": "application/json",
     },
@@ -25,6 +25,28 @@ apiService.interceptors.request.use(
         return config;
     },
     (error) => {
+        return Promise.reject(error);
+    }
+);
+
+// Interceptor para manejo de errores globales
+apiService.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (!error.response) {
+            // Error de red o servidor no disponible
+            console.error("Servidor no disponible.");
+            window.location.href = "/server-error";
+        } else {
+            const status = error.response.status;
+
+            if (status === 404) {
+                window.location.href = "/404";
+            } else if (status >= 500 || status === 0) {
+                window.location.href = "/server-error";
+            }
+        }
+
         return Promise.reject(error);
     }
 );
@@ -125,7 +147,9 @@ export const getComentariosPorMonumento = async (
     return response.data;
 };
 
-export const getComentariosUsuario = async (id:number): Promise<Comentario[]> => {
+export const getComentariosUsuario = async (
+    id: number
+): Promise<Comentario[]> => {
     const response = await apiService.get<Comentario[]>(
         `/comentariosUsuario/${id}`
     );
@@ -168,7 +192,9 @@ export const deleteRespuesta = async (id: number): Promise<void> => {
     await apiService.delete(`/respuestas/${id}`);
 };
 
-export const getRespuestasUsuario = async (id:number): Promise<Respuesta[]> => {
+export const getRespuestasUsuario = async (
+    id: number
+): Promise<Respuesta[]> => {
     const response = await apiService.get<Respuesta[]>(
         `/respuestasUsuario/${id}`
     );
@@ -216,7 +242,7 @@ export const login = async (data: LoginData): Promise<LoginResponse> => {
 };
 
 export const logout = async () => {
-    let message = "Sesión cerrada correctamente."; 
+    let message = "Sesión cerrada correctamente.";
     try {
         const response = await apiService.post("/logout");
         message = response.data?.message || message;
