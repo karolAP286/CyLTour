@@ -38,7 +38,7 @@ const QRCodesAdmin = () => {
         return `http://api.qrserver.com/v1/create-qr-code/?data=${fullUrl}&size=300x300&bgcolor=ffffff`;
     };
 
-    if (loading) return <Spin tip="Cargando monumentos..." fullscreen/>;
+    if (loading) return <Spin tip="Cargando qrs..." fullscreen/>;
 
     return (
         <div>
