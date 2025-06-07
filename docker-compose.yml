@@ -1,55 +1,42 @@
 services:
   frontend:
-    container_name: CyLTourBuilder
     build:
-      context: ./CyLTour
-      dockerfile: Dockerfile
-    command: sh -c "npm install && npm run build"
-    volumes:
-      - ./CyLTour/build:/app/build # Compartir build con host local
-    # No expone puertos ni necesita estar corriendo, solo para build
+      context: ./frontend
+    container_name: react_frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
 
   backend:
-    container_name: CyLTourApi
     build:
-      context: ./CyLTourApi
+      context: ./backend
       dockerfile: Dockerfile
+    container_name: laravel_backend
+    ports:
+      - "8081:80"
     volumes:
-      - ./CyLTourApi:/var/www
+      - ./backend:/var/www/html
     environment:
       - DB_HOST=db
-      - DB_PORT=3306
-      - DB_DATABASE=laravel
-      - DB_USERNAME=laravel
+      - DB_DATABASE=laravel_db
+      - DB_USERNAME=laravel_user
       - DB_PASSWORD=secret
     depends_on:
       - db
 
-  apache:
-    image: httpd:2.4
-    container_name: CyLTourApache
-    ports:
-      - "8000:80"
-    volumes:
-      - ./CyLTour/build:/var/www/CyLTour
-      - ./CyLTourApi/public:/var/www/CyLTourApi/public
-      - ./apache-config/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro
-      - ./apache-config/vhosts:/usr/local/apache2/conf/vhosts:ro
-    depends_on:
-      - frontend
-      - backend
-
   db:
-    image: mysql:8
-    container_name: CyLTourDB
-    restart: unless-stopped
-    ports:
-      - '3306:3306'
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
     environment:
-      MYSQL_DATABASE: laravel
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: laravel
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: laravel_db
+      MYSQL_USER: laravel_user
       MYSQL_PASSWORD: secret
+    ports:
+      - "3306:3306"
     volumes:
       - dbdata:/var/lib/mysql
 

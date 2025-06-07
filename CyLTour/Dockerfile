@@ -1,18 +1,18 @@
-# Stage 1: Build
+# Etapa 1: construir React
 FROM node:18 AS build
 
 WORKDIR /app
+
 COPY package*.json ./
 RUN npm install
+
 COPY . .
-RUN npm run build   
-# esto genera /app/dist o /app/build según configuración
+RUN npm run build
 
-# Stage 2: Production image
-FROM node:18 AS frontend
+# Etapa 2: servir con Apache
+FROM httpd:latest
 
-WORKDIR /output
-COPY --from=build /app/dist ./dist   
-# o /app/build según configuración
+COPY --from=build /app/build /usr/local/apache2/htdocs/
 
-# Aquí podrías copiar a un volumen o servir con nginx/apache
+EXPOSE 80
+CMD ["httpd-foreground"]
