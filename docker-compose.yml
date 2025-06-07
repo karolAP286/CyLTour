@@ -7,6 +7,8 @@ services:
       - "8080:80"
     depends_on:
       - backend
+    environment:
+      - VITE_API_BASE_URL=http://laravel_backend:80
 
   backend:
     build:
