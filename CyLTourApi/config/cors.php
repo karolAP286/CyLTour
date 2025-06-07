@@ -16,7 +16,7 @@ return [
 
 'allowed_methods' => ['*'],  // Permite todos los métodos HTTP (GET, POST, etc.)
 
-'allowed_origins' => ['*'],  // Solo permite solicitudes de tu frontend en localhost:4200
+'allowed_origins' => ['http://187.33.156.209:8080'],  // Solo permite solicitudes de tu frontend en localhost:4200
 
 'allowed_origins_patterns' => ['*'],  // Permite cualquier patrón de origen (si es necesario)
 
