@@ -9,8 +9,6 @@ services:
     volumes:
       - ./CyLTour:/app
     command: sh -c "npm install && npm run build"
-    depends_on:
-      - apache
 
   backend:
     container_name: CyLTourApi
