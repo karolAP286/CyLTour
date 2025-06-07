@@ -1,16 +1,18 @@
-# Stage 1: build
-FROM node:18 as build
+# Stage 1: Build
+FROM node:18 AS build
 
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build
+RUN npm run build   
+# esto genera /app/dist o /app/build según configuración
 
-# Stage 2: copiar solo el build al host (opcional)
-FROM busybox:1.34.1-uclibc
+# Stage 2: Production image
+FROM node:18 AS frontend
 
 WORKDIR /output
-COPY --from=build /app/build ./build
+COPY --from=build /app/dist ./dist   
+# o /app/build según configuración
 
-# Solo para copiar el build fuera del contenedor
+# Aquí podrías copiar a un volumen o servir con nginx/apache
