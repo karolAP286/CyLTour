@@ -12,7 +12,7 @@ RUN npm run build
 # Etapa 2: servir con Apache
 FROM httpd:latest
 
-COPY --from=build /app/build /usr/local/apache2/htdocs/
+COPY --from=build /app/dist /usr/local/apache2/htdocs/
 
 EXPOSE 80
 CMD ["httpd-foreground"]
