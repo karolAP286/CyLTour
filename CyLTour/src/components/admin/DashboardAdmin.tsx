@@ -88,43 +88,42 @@ const DashboardAdmin = () => {
     ];
 
     return (
-    <div>
-        {loading ? (
-            <Spin spinning={loading} tip="Cargando datos..." fullscreen />
-        ) : (
-            <>
-                <Row gutter={[16, 16]}>
-                    {stats.map((stat, index) => (
-                        <Col xs={24} sm={12} md={12} lg={6} key={index}>
-                            <Card
-                                styles={{
-                                    body: {
-                                        height: 120,
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "center",
-                                    },
-                                }}
-                            >
-                                <Statistic
-                                    title={stat.title}
-                                    value={stat.value}
-                                    prefix={stat.icon}
-                                />
-                            </Card>
-                        </Col>
-                    ))}
-                </Row>
+        <div>
+            {loading ? (
+                <Spin spinning={loading} tip="Cargando datos..." fullscreen />
+            ) : (
+                <>
+                    <Row gutter={[16, 16]}>
+                        {stats.map((stat, index) => (
+                            <Col xs={24} sm={12} md={12} lg={6} key={index}>
+                                <Card
+                                    styles={{
+                                        body: {
+                                            height: 120,
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            justifyContent: "center",
+                                        },
+                                    }}
+                                >
+                                    <Statistic
+                                        title={stat.title}
+                                        value={stat.value}
+                                        prefix={stat.icon}
+                                    />
+                                </Card>
+                            </Col>
+                        ))}
+                    </Row>
 
-                <Card style={{ marginTop: 24 }}>
-                    <h3>Visitas por mes</h3>
-                    <Line {...config} />
-                </Card>
-            </>
-        )}
-    </div>
-);
-
+                    <Card style={{ marginTop: 24 }}>
+                        <h3>Visitas por mes</h3>
+                        <Line {...config} />
+                    </Card>
+                </>
+            )}
+        </div>
+    );
 };
 
 export default DashboardAdmin;
