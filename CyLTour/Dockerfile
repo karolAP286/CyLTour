@@ -1,5 +1,5 @@
-# React frontend
-FROM node:18
+# React frontend - producción
+FROM node:18 AS build
 
 WORKDIR /app
 
@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3000
+# 👇 Pasar la variable de entorno de Docker ARG a ENV para que Vite la vea
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 
-CMD ["npm", "start"]
+RUN npm run build
