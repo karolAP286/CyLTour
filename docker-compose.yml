@@ -1,16 +1,13 @@
-version: '3.8'
-
 services:
   frontend:
-    container_name: CyLTour
+    container_name: CyLTourBuilder
     build:
       context: ./CyLTour
       dockerfile: Dockerfile
-    volumes:
-      - ./CyLTour:/app
     command: sh -c "npm install && npm run build"
-    depends_on:
-      - backend
+    volumes:
+      - ./CyLTour/build:/app/build # Compartir build con host local
+    # No expone puertos ni necesita estar corriendo, solo para build
 
   backend:
     container_name: CyLTourApi
@@ -35,7 +32,7 @@ services:
       - "8000:80"
     volumes:
       - ./CyLTour/build:/var/www/CyLTour
-      - ./CyLTourApi/public:/var/www/CyLTourApi
+      - ./CyLTourApi/public:/var/www/CyLTourApi/public
       - ./apache-config/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro
       - ./apache-config/vhosts:/usr/local/apache2/conf/vhosts:ro
     depends_on:
