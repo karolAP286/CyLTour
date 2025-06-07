@@ -18,6 +18,7 @@ services:
     volumes:
       - ./CyLTourApi:/var/www/html
     environment:
+      - DB_CONNECTION=mysql
       - DB_HOST=db
       - DB_DATABASE=laravel_db
       - DB_USERNAME=laravel_user
