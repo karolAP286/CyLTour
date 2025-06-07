@@ -18,5 +18,10 @@ RUN composer install --no-interaction --optimize-autoloader
 # Permisos
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
+# Copiar el entrypoint y darle permisos
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 80
-CMD ["apache2-foreground"]
+
+ENTRYPOINT ["/entrypoint.sh"]
