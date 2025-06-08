@@ -12,7 +12,6 @@ CyLTour/
 │
 ├── CyLTour/           # Frontend (React + TypeScript + Vite)
 ├── CyLTourApi/        # Backend API (Laravel)
-├── apache-config/     # Configuración de Apache y vhosts
 ├── docker-compose.yml # Orquestación de servicios Docker
 └── README.md          # Este archivo
 ```
