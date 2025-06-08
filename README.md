@@ -38,12 +38,12 @@ CyLTour/
     ```
 2. Inicia todos los servicios:
     ```
-    docker-compose up --build
+    docker-compose up --build -d
     ```
 3. Accede a la aplicación:
-    - Frontend: [http://localhost:3000](http://localhost:3000)
-    - Backend API: [http://localhost:8000/api/v2](http://localhost:8000/api/v2)
-    - phpMyAdmin (si lo añades): [http://localhost:8080](http://localhost:8080)
+    - Frontend: [http://localhost:443](http://localhost:443)
+    - Backend API: [http://localhost:8081/api/v2](http://localhost:8081/api/v2)
+    - phpMyAdmin (si lo añades): [http://localhost:8081](http://localhost:8081)
 
 ---
 
