@@ -4,7 +4,7 @@ Este es el frontend de CyLTour, una aplicación web desarrollada con **React**, 
 
 ## Requisitos
 
-- Node.js >= 18
+- Node.js >= 22
 - npm >= 9 (o yarn/pnpm)
 - Acceso a la API backend de CyLTour (ver carpeta CyLTourApi)
 

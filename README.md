@@ -22,8 +22,8 @@ CyLTour/
 
 - Docker y Docker Compose (recomendado para desarrollo local)
 - O bien:
-  - Node.js >= 18 y npm (para frontend)
-  - PHP >= 8.0 y Composer (para backend)
+  - Node.js >= 22 y npm (para frontend)
+  - PHP >= 8.4 y Composer (para backend)
   - MySQL/MariaDB
 
 ---

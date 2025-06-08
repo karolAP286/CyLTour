@@ -4,7 +4,7 @@ This is the backend API for the CyLTour project, built with Laravel.
 
 ## Requisitos
 
-- PHP >= 8.0
+- PHP >= 8.4
 - Composer
 - MySQL/MariaDB
 - XAMPP (opcional, para entorno local)
