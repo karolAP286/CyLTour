@@ -15,7 +15,7 @@ Este es el frontend de CyLTour, una aplicación web desarrollada con **React**, 
     ```
     npm install
     ```
-3. (Opcional) Configura variables de entorno si tu API no está en `http://localhost:8000/api/v2`.
+3. (Opcional) Configura variables de entorno si tu API no está en `http://localhost:8081/api/v2`.
 
 ## Uso en desarrollo
 
@@ -23,7 +23,7 @@ Inicia el servidor de desarrollo con:
 ```
 npm run dev
 ```
-La aplicación estará disponible en [http://localhost:3000](http://localhost:3000).
+La aplicación estará disponible en [http://localhost:443](http://localhost:443).
 
 ## Scripts principales
 
@@ -55,7 +55,7 @@ Si necesitas cambiar la URL de la API, edita el valor en `.env`:
 
 | **Name**                                 | **Description**        | **Default**                     |
 | ---------------------------------------- | ---------------------- | ------------------------------- |
-| **VITE_API_BASE_URL**                    | Url base para API      | http://localhost:8000/api/v2    |
+| **VITE_API_BASE_URL**                    | Url base para API      | [http://localhost:8081/api/v2  ](http://187.33.156.209:8081/api/v2)  |
 
 ---
 
