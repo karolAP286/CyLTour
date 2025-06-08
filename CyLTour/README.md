@@ -23,7 +23,7 @@ Inicia el servidor de desarrollo con:
 ```
 npm run dev
 ```
-La aplicación estará disponible en [http://localhost:443](http://localhost:443).
+La aplicación estará disponible en [http://localhost](http://localhost).
 
 ## Scripts principales
 

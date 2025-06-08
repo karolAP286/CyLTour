@@ -40,7 +40,7 @@ CyLTour/
     docker-compose up --build -d
     ```
 3. Accede a la aplicación:
-    - Frontend: [http://localhost:443](http://localhost:443)
+    - Frontend: [http://localhost](http://localhost)
     - Backend API: [http://localhost:8081/api/v2](http://localhost:8081/api/v2)
     - phpMyAdmin (si lo añades): [http://localhost:8081](http://localhost:8081)
 
