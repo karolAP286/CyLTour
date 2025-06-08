@@ -39,20 +39,20 @@ CyLTour/
 
     ### 🔹 Accede al contenedor de MySQL:
 
-    ```bash
+    ```
         docker exec -it mysql_db bash
     ```
 
     ### 🔹 Accede a MySQL dentro del contenedor:
-    ```bash
+    ```
         mysql -u laravel_user -p
     ```
     ### 🔹 Selecciona la base de datos:
-    ```bash
+    ```
         USE laravel_db;
     ```
     ### 🔹 Inserta los roles:
-    ```bash
+    ```
         INSERT INTO roles (rol, created_at, updated_at) 
         VALUES 
         ('Administrador', NOW(), NOW()), 
@@ -60,7 +60,7 @@ CyLTour/
     ```
 
     ### 🔹 Crea un usuario administrador:
-    ```bash
+    ```
         INSERT INTO usuarios (
             rol_id, nombre, fecha_nacimiento, dni, correo, password, created_at, updated_at
         )VALUES (
