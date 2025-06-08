@@ -108,7 +108,7 @@ Consulta la documentación detallada de endpoints en [`CyLTourApi/README.md`](./
 ---
 ## Mas Información
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/karolAP286/CyLTour)
+
 
 
 **CyLTour** — Proyecto de turismo cultural de Castilla y León.
