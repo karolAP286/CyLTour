@@ -55,7 +55,7 @@ Si necesitas cambiar la URL de la API, edita el valor en `.env`:
 
 | **Name**                                 | **Description**        | **Default**                     |
 | ---------------------------------------- | ---------------------- | ------------------------------- |
-| **VITE_API_BASE_URL**                    | Url base para API      | [http://localhost:8081/api/v2  ](http://187.33.156.209:8081/api/v2)  |
+| **VITE_API_BASE_URL**                    | Url base para API      | [http://187.33.156.209:8081/api/v2  ](http://187.33.156.209:8081/api/v2)  |
 
 ---
 
