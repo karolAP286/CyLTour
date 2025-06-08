@@ -37,7 +37,7 @@ CyLTour/
     ```
 2. Añadir roles y un usuario administrador en el contenedor de MySQL
 
-    ### 🔹 Accede al contenedor de MySQL:
+    #### 🔹 Accede al contenedor de MySQL:
 
     ```
         docker exec -it mysql_db bash
