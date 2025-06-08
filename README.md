@@ -59,7 +59,7 @@ CyLTour/
         ('Usuario', NOW(), NOW());
     ```
 
-    ### 🔹 Crea un usuario administrador:
+    ### 🔹 Crea un usuario administrador (Contraseña: administrador):
     ```
         INSERT INTO usuarios (
             rol_id, nombre, fecha_nacimiento, dni, correo, password, created_at, updated_at
