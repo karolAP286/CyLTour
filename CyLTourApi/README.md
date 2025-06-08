@@ -16,7 +16,7 @@ This is the backend API for the CyLTour project, built with Laravel.
     ```
     composer install
     ```
-3. Copia el archivo de entorno y configura tus variables:
+3. Configura tus variables en el archivo .env, si no lo tienes creado copia el archivo .env.example en .env y modificalo:
     ```
     cp .env.example .env
     ```
@@ -36,7 +36,7 @@ This is the backend API for the CyLTour project, built with Laravel.
     ```
     php artisan serve
     ```
-- La API estará disponible en `http://localhost:8000/api/v2`.
+- La API estará disponible en `http://localhost:8081/api/v2`.
 
 ## Endpoints de la API CyLTour
 
