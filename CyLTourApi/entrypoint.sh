@@ -1,16 +1,19 @@
 #!/bin/bash
-set -e
 
-echo "Esperando que la base de datos esté disponible..."
+# Wait for MySQL to be ready
+echo "Waiting for MySQL..."
 
-until php artisan migrate:status > /dev/null 2>&1; do
-  echo "Esperando a la base de datos..."
-  sleep 3
+until mysql -h"$DB_HOST" -u"$DB_USERNAME" -p"$DB_PASSWORD" -e "SELECT 1;" 2>/dev/null; do
+  echo "MySQL not ready - sleeping"
+  sleep 10
 done
 
-echo "Ejecutando migraciones..."
+composer install 
+php artisan config:clear
+php artisan key:generate
 php artisan migrate --force
 
-echo "Iniciando Apache..."
-apache2-foreground
+echo "MySQL is up - running migrations and starting server..."
 
+# Start Apache
+exec apache2-foreground

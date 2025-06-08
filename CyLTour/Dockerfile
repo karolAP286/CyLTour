@@ -1,18 +1,13 @@
-# Etapa 1: construir React
-FROM node:22 AS build
+FROM node:22
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json .
+
 RUN npm install
 
 COPY . .
-RUN npm run build
 
-# Etapa 2: servir con Apache
-FROM httpd:latest
+EXPOSE 5173
 
-COPY --from=build /app/dist /usr/local/apache2/htdocs/
-
-EXPOSE 80
-CMD ["httpd-foreground"]
+CMD ["npm", "run", "dev"]

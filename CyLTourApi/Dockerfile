@@ -1,27 +1,30 @@
 FROM php:8.2-apache
 
-# Instalar extensiones necesarias para Laravel
+# Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
-    libzip-dev zip unzip git \
-    && docker-php-ext-install pdo_mysql zip \
+    libzip-dev zip unzip git curl libonig-dev default-mysql-client libxml2-dev \
+    && docker-php-ext-install pdo pdo_mysql zip bcmath mbstring \
     && a2enmod rewrite
 
-# Copiar composer e instalar dependencias
+# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Set working directory
 WORKDIR /var/www/html
 
+# Copy project files
 COPY . .
 
-RUN composer install --no-interaction --optimize-autoloader
-
-# Permisos
+# Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chmod +x entrypoint.sh
 
-# Copiar el entrypoint y darle permisos
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Apache document root to public
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /etc/apache2/sites-available/000-default.conf
 
+# Expose HTTP port
 EXPOSE 80
 
-ENTRYPOINT ["/entrypoint.sh"]
+# Start Apache in foreground
+CMD ["bash", "entrypoint.sh"]
