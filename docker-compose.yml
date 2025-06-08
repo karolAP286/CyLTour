@@ -4,7 +4,7 @@ services:
       context: ./CyLTour
     container_name: frontend
     ports:
-      - 443:5173
+      - 80:5173
 
   backend:
     build:
