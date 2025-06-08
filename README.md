@@ -35,11 +35,19 @@ CyLTour/
     git clone https://github.com/karolAP286/CyLTour.git
     cd CyLTour
     ```
-2. Inicia todos los servicios:
+2. Añade los roles en el contenedor de mysql y un usuario administrador(Contraseña: admin).
+    ```
+        docker exec -it mysql_db bash
+        mysql -u laravel_user -p #Intoducir contraseña despues
+        USE laravel_db;
+        INSERT INTO roles (rol, created_at, updated_at) VALUES ('Administrador', NOW(), NOW()), ('Usuario', NOW(), NOW());
+        INSERT INTO usuarios (rol_id, nombre, fecha_nacimiento, dni, correo, password, created_at, updated_at) VALUES (1, 'Admin User', '1990-05-15', '12345678A', 'admin@admin.com', '$2y$10$e0NR8exl8OAVEmJDZpb5MuMbf8YlIGD9b4e/JiyYkBY35PHBcGcG2', NOW(), NOW());
+    ```
+3. Inicia todos los servicios:
     ```
     docker-compose up --build -d
     ```
-3. Accede a la aplicación:
+4. Accede a la aplicación:
     - Frontend: [http://localhost](http://localhost)
     - Backend API: [http://localhost:8081/api/v2](http://localhost:8081/api/v2)
     - phpMyAdmin (si lo añades): [http://localhost:8081](http://localhost:8081)
@@ -70,7 +78,11 @@ CyLTour/
     ```
     php artisan migrate
     ```
-6. Inicia el servidor:
+6. Necesitas crear 2 roles en la BBDD, rol Administrador y rol Usuario.
+    ```
+    INSERT INTO roles (rol, created_at, updated_at) VALUES ('Administrador', NOW(), NOW()), ('Usuario', NOW(), NOW());
+    ```
+7. Inicia el servidor:
     ```
     php artisan serve
     ```
