@@ -35,13 +35,13 @@ CyLTour/
     git clone https://github.com/karolAP286/CyLTour.git
     cd CyLTour
     ```
-2. Añade los roles en el contenedor de mysql y un usuario administrador(Contraseña: admin).
+2. Añade los roles en el contenedor de mysql y un usuario administrador(Contraseña: administrador).
     ```
         docker exec -it mysql_db bash
-        mysql -u laravel_user -p #Intoducir contraseña despues
+        mysql -u laravel_user -p #Intoducir contraseña
         USE laravel_db;
         INSERT INTO roles (rol, created_at, updated_at) VALUES ('Administrador', NOW(), NOW()), ('Usuario', NOW(), NOW());
-        INSERT INTO usuarios (rol_id, nombre, fecha_nacimiento, dni, correo, password, created_at, updated_at) VALUES (1, 'Admin User', '1990-05-15', '12345678A', 'admin@admin.com', '$2y$10$e0NR8exl8OAVEmJDZpb5MuMbf8YlIGD9b4e/JiyYkBY35PHBcGcG2', NOW(), NOW());
+        INSERT INTO usuarios (rol_id, nombre, fecha_nacimiento, dni, correo, password, created_at, updated_at) VALUES (1, 'Admin User', '1990-05-15', '12345678A', 'admin@admin.com', '$2y$12$GntkAfLl0A1o4P3szuHlsuGDjhtFecSE0OlPUmwGEX4bAbN/4WGrO', NOW(), NOW());
     ```
 3. Inicia todos los servicios:
     ```
