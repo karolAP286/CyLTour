@@ -33,7 +33,7 @@ const QRCodesAdmin = () => {
     }, []);
 
     const generarQRUrl = (monumento: Monumento) => {
-        const baseUrl = "https://cyl-tour.vercel.app/provincia/";
+        const baseUrl = "http://cyltour.ddns.net/provincia/";
         const fullUrl = `${baseUrl}${monumento.poblacion_provincia}/${monumento.identificador}`;
         return `http://api.qrserver.com/v1/create-qr-code/?data=${fullUrl}&size=300x300&bgcolor=ffffff`;
     };
