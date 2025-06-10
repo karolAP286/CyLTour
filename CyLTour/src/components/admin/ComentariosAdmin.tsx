@@ -6,17 +6,31 @@ import {
     updateComentario,
 } from "../../services/apiService";
 import { Comentario } from "../../types/Comentario";
+import { getMonumentoById } from "../../services/datosAbiertosService";
 
 const ComentariosAdmin = () => {
-    const [comentarios, setComentarios] = useState<Comentario[]>([]);
+    const [comentarios, setComentarios] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [loadingTable, setLoadingTable] = useState(true);
 
     const fetchComentarios = async () => {
         try {
             const data = await getComentariosRechazados();
-            setComentarios(data);
-            console.log(data);
+
+            // Obtener monumentos para cada comentario
+            const comentariosConMonumento = await Promise.all(
+                data.map(async (comentario: Comentario) => {
+                    try {
+                        const monumento = await getMonumentoById(comentario.monumento_id.toString());
+                        return { ...comentario, monumentoNombre: monumento.nombre };
+                    } catch (error) {
+                        console.error("Error al obtener monumento:", error);
+                        return { ...comentario, monumentoNombre: "Desconocido" };
+                    }
+                })
+            );
+
+            setComentarios(comentariosConMonumento);
         } catch (error) {
             console.error("Error al cargar comentarios:", error);
         } finally {
@@ -28,10 +42,7 @@ const ComentariosAdmin = () => {
         fetchComentarios();
     }, []);
 
-    const handleAprobarComentario = async (
-        comentarioId: number,
-        data: Comentario
-    ) => {
+    const handleAprobarComentario = async (comentarioId: number, data: Comentario) => {
         setLoading(true);
         try {
             await updateComentario(comentarioId, { ...data, estado: true });
@@ -82,6 +93,11 @@ const ComentariosAdmin = () => {
             key: "puntuacion",
         },
         {
+            title: "Monumento",
+            dataIndex: "monumentoNombre",
+            key: "monumento",
+        },
+        {
             title: "Estado",
             key: "estado",
             render: (_: any, record: Comentario) => {
@@ -93,7 +109,7 @@ const ComentariosAdmin = () => {
                 if (record.estado) {
                     return <Tag color="green">Aprobado</Tag>;
                 } else if (isPendiente) {
-                    return <Tag color="orange">En curso o pendiente</Tag>;
+                    return <Tag color="orange">Pendiente</Tag>;
                 } else {
                     return <Tag color="red">Rechazado</Tag>;
                 }
@@ -134,7 +150,7 @@ const ComentariosAdmin = () => {
                                 loading={loading}
                                 disabled={isRechazado}
                             >
-                                Rechazar
+                                {isRechazado ? "Ya rechazado" : "Rechazar"}
                             </Button>
                         </>
                     );
@@ -146,7 +162,7 @@ const ComentariosAdmin = () => {
 
     return (
         <div>
-            <h2>Comentarios Rechazados</h2>
+            <h2>Comentarios pendientes o rechazados</h2>
             <Table
                 columns={columns}
                 dataSource={comentarios}
