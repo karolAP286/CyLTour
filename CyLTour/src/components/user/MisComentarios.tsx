@@ -1,56 +1,84 @@
 import { useEffect, useState } from "react";
-import { Table, Tag, message } from "antd";
-import { InfoCircleOutlined } from "@ant-design/icons";
-import { getComentariosUsuario} from "../../services/apiService";
+import { Table, Tag, message, Button, Popconfirm } from "antd";
+import { InfoCircleOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+    getComentariosUsuario,
+    deleteComentario,
+} from "../../services/apiService";
 import { Comentario } from "../../types/Comentario";
 import { getMonumentoById } from "../../services/datosAbiertosService";
 
 const MisComentarios = () => {
     const [comentarios, setComentarios] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [deleting, setDeleting] = useState<number | null>(null);
+
+    const fetchComentarios = async () => {
+        try {
+            const encodedId = localStorage.getItem("user_id");
+            if (!encodedId) {
+                message.error("Usuario no autenticado");
+                return;
+            }
+
+            const decodedId = atob(encodedId);
+            const userId = parseInt(decodedId, 10);
+
+            if (isNaN(userId)) {
+                message.error("ID de usuario inválido");
+                return;
+            }
+
+            const data = await getComentariosUsuario(userId);
+            
+            const monumentoCache: Record<number, string> = {};
+
+            const comentariosConMonumento = await Promise.all(
+                data.map(async (comentario: Comentario) => {
+                    if (monumentoCache[comentario.monumento_id]) {
+                        return {
+                            ...comentario,
+                            monumentoNombre: monumentoCache[comentario.monumento_id],
+                        };
+                    }
+
+                    try {
+                        const monumento = await getMonumentoById(comentario.monumento_id.toString());
+                        monumentoCache[comentario.monumento_id] = monumento.nombre;
+                        return { ...comentario, monumentoNombre: monumento.nombre };
+                    } catch (error) {
+                        console.error("Error al obtener monumento:", error);
+                        return { ...comentario, monumentoNombre: "Desconocido" };
+                    }
+                })
+            );
+
+            setComentarios(comentariosConMonumento);
+        } catch (error) {
+            console.error("Error al cargar comentarios:", error);
+            message.error("No se pudieron cargar los comentarios");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchComentarios = async () => {
-            try {
-                const encodedId = localStorage.getItem("user_id");
-                if (!encodedId) {
-                    message.error("Usuario no autenticado");
-                    return;
-                }
-
-                const decodedId = atob(encodedId);
-                const userId = parseInt(decodedId, 10);
-
-                if (isNaN(userId)) {
-                    message.error("ID de usuario inválido");
-                    return;
-                }
-
-                const data = await getComentariosUsuario(userId);
-
-                const comentariosConMonumento = await Promise.all(
-                    data.map(async (comentario: Comentario) => {
-                        try {
-                            const monumento = await getMonumentoById(comentario.monumento_id.toString());
-                            return { ...comentario, monumentoNombre: monumento.nombre };
-                        } catch (error) {
-                            console.error("Error al obtener monumento:", error);
-                            return { ...comentario, monumentoNombre: "Desconocido" };
-                        }
-                    })
-                );
-
-                setComentarios(comentariosConMonumento);
-            } catch (error) {
-                console.error("Error al cargar comentarios:", error);
-                message.error("No se pudieron cargar los comentarios");
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchComentarios();
     }, []);
+
+    const handleDelete = async (comentarioId: number) => {
+        setDeleting(comentarioId);
+        try {
+            await deleteComentario(comentarioId);
+            message.success("Comentario eliminado");
+            fetchComentarios();
+        } catch (error) {
+            console.error("Error al eliminar comentario:", error);
+            message.error("No se pudo eliminar el comentario");
+        } finally {
+            setDeleting(null);
+        }
+    };
 
     const columns = [
         {
@@ -91,6 +119,27 @@ const MisComentarios = () => {
             dataIndex: "created_at",
             key: "fecha",
             render: (fecha: string) => new Date(fecha).toLocaleDateString(),
+        },
+        {
+            title: "Acciones",
+            key: "acciones",
+            render: (_: any, record: Comentario) => (
+                <Popconfirm
+                    title="¿Estás seguro de que deseas eliminar este comentario?"
+                    onConfirm={() => handleDelete(record.id)}
+                    okText="Sí"
+                    cancelText="No"
+                >
+                    <Button
+                        type="primary"
+                        danger
+                        icon={<DeleteOutlined />}
+                        loading={deleting === record.id}
+                    >
+                        Eliminar
+                    </Button>
+                </Popconfirm>
+            ),
         },
     ];
 
