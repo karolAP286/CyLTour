@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Table, Tag, message } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
-import { getComentariosUsuario } from "../../services/apiService";
+import { getComentariosUsuario} from "../../services/apiService";
 import { Comentario } from "../../types/Comentario";
+import { getMonumentoById } from "../../services/datosAbiertosService";
 
 const MisComentarios = () => {
-    const [comentarios, setComentarios] = useState<Comentario[]>([]);
+    const [comentarios, setComentarios] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
@@ -26,7 +27,20 @@ const MisComentarios = () => {
                 }
 
                 const data = await getComentariosUsuario(userId);
-                setComentarios(data);
+
+                const comentariosConMonumento = await Promise.all(
+                    data.map(async (comentario: Comentario) => {
+                        try {
+                            const monumento = await getMonumentoById(comentario.monumento_id.toString());
+                            return { ...comentario, monumentoNombre: monumento.nombre };
+                        } catch (error) {
+                            console.error("Error al obtener monumento:", error);
+                            return { ...comentario, monumentoNombre: "Desconocido" };
+                        }
+                    })
+                );
+
+                setComentarios(comentariosConMonumento);
             } catch (error) {
                 console.error("Error al cargar comentarios:", error);
                 message.error("No se pudieron cargar los comentarios");
@@ -40,6 +54,11 @@ const MisComentarios = () => {
 
     const columns = [
         {
+            title: "Monumento",
+            dataIndex: "monumentoNombre",
+            key: "monumento",
+        },
+        {
             title: "Contenido",
             dataIndex: "contenido",
             key: "contenido",
@@ -51,14 +70,21 @@ const MisComentarios = () => {
         },
         {
             title: "Estado",
-            dataIndex: "estado",
             key: "estado",
-            render: (estado: boolean) =>
-                estado ? (
-                    <Tag color="green">Aprobado</Tag>
-                ) : (
-                    <Tag color="red">Rechazado</Tag>
-                ),
+            render: (_: any, record: Comentario) => {
+                const isPendiente =
+                    !record.estado &&
+                    new Date(record.created_at).getTime() ===
+                        new Date(record.updated_at).getTime();
+
+                if (record.estado) {
+                    return <Tag color="green">Aprobado</Tag>;
+                } else if (isPendiente) {
+                    return <Tag color="orange">Pendiente</Tag>;
+                } else {
+                    return <Tag color="red">Rechazado</Tag>;
+                }
+            },
         },
         {
             title: "Fecha",
