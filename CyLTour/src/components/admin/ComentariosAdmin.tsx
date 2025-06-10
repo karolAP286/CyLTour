@@ -16,6 +16,7 @@ const ComentariosAdmin = () => {
         try {
             const data = await getComentariosRechazados();
             setComentarios(data);
+            console.log(data);
         } catch (error) {
             console.error("Error al cargar comentarios:", error);
         } finally {
@@ -35,10 +36,25 @@ const ComentariosAdmin = () => {
         try {
             await updateComentario(comentarioId, { ...data, estado: true });
             message.success("Comentario aprobado correctamente");
-            fetchComentarios(); // recargar lista
+            fetchComentarios();
         } catch (error) {
             console.error(error);
             message.error("Error al aprobar el comentario");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleRechazarComentario = async (comentarioId: number, data: Comentario) => {
+        setLoading(true);
+        try {
+            const dataComentario = data.contenido + ".";
+            await updateComentario(comentarioId, { ...data, contenido: dataComentario });
+            message.success("Comentario rechazado (fecha actualizada)");
+            fetchComentarios();
+        } catch (error) {
+            console.error(error);
+            message.error("Error al rechazar el comentario");
         } finally {
             setLoading(false);
         }
@@ -67,14 +83,21 @@ const ComentariosAdmin = () => {
         },
         {
             title: "Estado",
-            dataIndex: "estado",
             key: "estado",
-            render: (estado: boolean) =>
-                estado ? (
-                    <Tag color="green">Aprobado</Tag>
-                ) : (
-                    <Tag color="red">Rechazado</Tag>
-                ),
+            render: (_: any, record: Comentario) => {
+                const isPendiente =
+                    !record.estado &&
+                    new Date(record.created_at).getTime() ===
+                        new Date(record.updated_at).getTime();
+
+                if (record.estado) {
+                    return <Tag color="green">Aprobado</Tag>;
+                } else if (isPendiente) {
+                    return <Tag color="orange">En curso o pendiente</Tag>;
+                } else {
+                    return <Tag color="red">Rechazado</Tag>;
+                }
+            },
         },
         {
             title: "Fecha",
@@ -85,25 +108,51 @@ const ComentariosAdmin = () => {
         {
             title: "Acciones",
             key: "acciones",
-            render: (_: any, record: Comentario) =>
-                !record.estado ? (
-                    <Button
-                        type="primary"
-                        onClick={() =>
-                            handleAprobarComentario(record.id, record)
-                        }
-                        loading={loading}
-                    >
-                        Aprobar
-                    </Button>
-                ) : null,
+            render: (_: any, record: Comentario) => {
+                if (!record.estado) {
+                    const isRechazado =
+                        new Date(record.created_at).getTime() !==
+                        new Date(record.updated_at).getTime();
+                    return (
+                        <>
+                            <Button
+                                type="primary"
+                                onClick={() =>
+                                    handleAprobarComentario(record.id, record)
+                                }
+                                loading={loading}
+                                style={{ marginRight: 8 }}
+                            >
+                                Aprobar
+                            </Button>
+                            <Button
+                                type="default"
+                                danger
+                                onClick={() =>
+                                    handleRechazarComentario(record.id, record)
+                                }
+                                loading={loading}
+                                disabled={isRechazado}
+                            >
+                                Rechazar
+                            </Button>
+                        </>
+                    );
+                }
+                return null;
+            },
         },
     ];
 
     return (
         <div>
             <h2>Comentarios Rechazados</h2>
-                <Table columns={columns} dataSource={comentarios} rowKey="id" loading={loadingTable} locale={{
+            <Table
+                columns={columns}
+                dataSource={comentarios}
+                rowKey="id"
+                loading={loadingTable}
+                locale={{
                     emptyText: loadingTable ? null : (
                         <div style={{ textAlign: "center", padding: "20px" }}>
                             <InfoCircleOutlined
@@ -112,7 +161,8 @@ const ComentariosAdmin = () => {
                             <p style={{ marginTop: 8 }}>No hay comentarios</p>
                         </div>
                     ),
-                }}/>
+                }}
+            />
         </div>
     );
 };
