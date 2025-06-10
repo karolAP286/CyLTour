@@ -38,7 +38,7 @@ const AdminPanel = () => {
         {
             key: "/admin/comentarios",
             icon: <FileTextOutlined />,
-            label: "Comentarios",
+            label: "Comentarios pendientes",
             onClick: () => navigate("/admin/comentarios"),
         },
         {
