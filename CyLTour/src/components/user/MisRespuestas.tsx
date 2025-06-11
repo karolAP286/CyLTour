@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { Table, message, Tag, Popconfirm, Button } from "antd";
 import {
     deleteRespuesta,
+    getComentarioById,
     getRespuestasUsuario,
 } from "../../services/apiService";
 import { Respuesta } from "../../types/Respuesta";
 import { DeleteOutlined, InfoCircleOutlined } from "@ant-design/icons";
+import { getMonumentoById } from "../../services/datosAbiertosService";
 
 const MisRespuestas = () => {
     const [respuestas, setRespuestas] = useState<Respuesta[]>([]);
@@ -27,7 +29,39 @@ const MisRespuestas = () => {
             }
 
             const data = await getRespuestasUsuario(userId);
-            setRespuestas(data);
+
+            const respuestasConDatos = await Promise.all(
+                data.map(async (respuesta: Respuesta) => {
+                    try {
+                        const comentario =
+                            respuesta.comentario ||
+                            (await getComentarioById(respuesta.comentario_id));
+                        const monumento = await getMonumentoById(
+                            comentario.monumento_id.toString()
+                        );
+
+                        return {
+                            ...respuesta,
+                            comentario: comentario,
+                            monumentoNombre: monumento.nombre,
+                        };
+                    } catch (error) {
+                        console.error(
+                            "Error al obtener datos relacionados:",
+                            error
+                        );
+                        return {
+                            ...respuesta,
+                            comentario: respuesta.comentario || {
+                                contenido: "Desconocido",
+                            },
+                            monumentoNombre: "Desconocido",
+                        };
+                    }
+                })
+            );
+
+            setRespuestas(respuestasConDatos);
         } catch (error) {
             console.error("Error al cargar respuestas:", error);
             message.error("No se pudieron cargar las respuestas");
@@ -94,6 +128,11 @@ const MisRespuestas = () => {
             title: "Comentario original",
             dataIndex: ["comentario", "contenido"],
             key: "comentario",
+        },
+        {
+            title: "Monumento",
+            dataIndex: "monumentoNombre",
+            key: "monumento",
         },
         {
             title: "Fecha",
