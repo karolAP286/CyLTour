@@ -132,7 +132,7 @@ const RespuestasAdmin = () => {
             title: "Respuesta",
             dataIndex: "contenido",
             key: "contenido",
-            render: (contenido: string) => contenido.slice(0, -1), // Mostrar sin el "0" o "1"
+            render: (contenido: string) => contenido.slice(0, -1),
         },
         {
             title: "Comentario original",
