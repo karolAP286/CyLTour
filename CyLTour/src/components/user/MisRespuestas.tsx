@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Table, message } from "antd";
+import { Table, message, Tag } from "antd";
 import { getRespuestasUsuario } from "../../services/apiService";
 import { Respuesta } from "../../types/Respuesta";
 import { InfoCircleOutlined } from "@ant-design/icons";
@@ -7,6 +7,7 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 const MisRespuestas = () => {
     const [respuestas, setRespuestas] = useState<Respuesta[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+
     useEffect(() => {
         const fetchRespuestas = async () => {
             try {
@@ -35,11 +36,43 @@ const MisRespuestas = () => {
         fetchRespuestas();
     }, []);
 
+    const obtenerEstado = (respuesta: Respuesta) => {
+        if (respuesta.updated_at === respuesta.created_at) return "En curso";
+        const contenido = respuesta.contenido.trim();
+        if (contenido.endsWith("0")) return "Rechazado";
+        if (contenido.endsWith("1")) return "Aprobado";
+        return "Desconocido";
+    };
+
+    const limpiarContenido = (contenido: string) => {
+        return contenido.trim().replace(/[01]$/, "").trim();
+    };
+
+    const renderEstadoTag = (estado: string) => {
+        switch (estado) {
+            case "En curso":
+                return <Tag color="blue">En curso</Tag>;
+            case "Aprobado":
+                return <Tag color="green">Aprobado</Tag>;
+            case "Rechazado":
+                return <Tag color="red">Rechazado</Tag>;
+            default:
+                return <Tag color="default">Desconocido</Tag>;
+        }
+    };
+
     const columns = [
         {
             title: "Respuesta",
             dataIndex: "contenido",
             key: "contenido",
+            render: (contenido: string) => limpiarContenido(contenido),
+        },
+        {
+            title: "Estado",
+            key: "estado",
+            render: (_: any, record: Respuesta) =>
+                renderEstadoTag(obtenerEstado(record)),
         },
         {
             title: "Comentario original",
