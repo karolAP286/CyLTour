@@ -21,7 +21,9 @@ const RespuestasAdmin = () => {
             const respuestasConDatos = await Promise.all(
                 data.map(async (respuesta: Respuesta) => {
                     try {
-                        const comentario = await getComentarioById(respuesta.comentario_id);
+                        const comentario = await getComentarioById(
+                            respuesta.comentario_id
+                        );
                         const monumento = await getMonumentoById(
                             comentario.monumento_id.toString()
                         );
@@ -32,7 +34,10 @@ const RespuestasAdmin = () => {
                             monumentoNombre: monumento.nombre,
                         };
                     } catch (error) {
-                        console.error("Error obteniendo datos relacionados:", error);
+                        console.error(
+                            "Error obteniendo datos relacionados:",
+                            error
+                        );
                         return {
                             ...respuesta,
                             comentarioContenido: "Desconocido",
@@ -54,7 +59,10 @@ const RespuestasAdmin = () => {
         fetchRespuestas();
     }, []);
 
-    const handleAprobarRespuesta = async (respuestaId: number, data: Respuesta) => {
+    const handleAprobarRespuesta = async (
+        respuestaId: number,
+        data: Respuesta
+    ) => {
         setLoading(true);
         try {
             const contenidoAprobado = data.contenido.trim() + "1";
@@ -72,7 +80,10 @@ const RespuestasAdmin = () => {
         }
     };
 
-    const handleRechazarRespuesta = async (respuestaId: number, data: Respuesta) => {
+    const handleRechazarRespuesta = async (
+        respuestaId: number,
+        data: Respuesta
+    ) => {
         setLoading(true);
         try {
             const contenidoRechazado = data.contenido.trim() + "0";
@@ -150,38 +161,36 @@ const RespuestasAdmin = () => {
             key: "acciones",
             render: (_: any, record: Respuesta) => {
                 const contenido = record.contenido.trim();
-                const pendiente =
-                    new Date(record.created_at).getTime() ===
-                    new Date(record.updated_at).getTime() &&
-                    !contenido.endsWith("0") &&
-                    !contenido.endsWith("1");
+                const isRechazado =
+                    new Date(record.created_at).getTime() !=
+                        new Date(record.updated_at).getTime() &&
+                    contenido.endsWith("0");
 
-                if (pendiente) {
-                    return (
-                        <>
-                            <Button
-                                type="primary"
-                                onClick={() =>
-                                    handleAprobarRespuesta(record.id, record)
-                                }
-                                loading={loading}
-                                style={{ marginRight: 8 }}
-                            >
-                                Aprobar
-                            </Button>
-                            <Button
-                                type="default"
-                                danger
-                                onClick={() =>
-                                    handleRechazarRespuesta(record.id, record)
-                                }
-                                loading={loading}
-                            >
-                                Rechazar
-                            </Button>
-                        </>
-                    );
-                }
+                return (
+                    <>
+                        <Button
+                            type="primary"
+                            onClick={() =>
+                                handleAprobarRespuesta(record.id, record)
+                            }
+                            loading={loading}
+                            style={{ marginRight: 8 }}
+                        >
+                            Aprobar
+                        </Button>
+                        <Button
+                            type="default"
+                            danger
+                            onClick={() =>
+                                handleRechazarRespuesta(record.id, record)
+                            }
+                            loading={loading}
+                            disabled={isRechazado}
+                        >
+                            {isRechazado ? "Ya rechazado" : "Rechazar"}
+                        </Button>
+                    </>
+                );
 
                 return null;
             },
