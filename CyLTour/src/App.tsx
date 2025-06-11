@@ -20,6 +20,7 @@ import MisRespuestas from "./components/user/MisRespuestas";
 import "@ant-design/v5-patch-for-react-19";
 import Error404 from "./components/error/Error404";
 import ServerDown from "./components/error/ServerDown";
+import RespuestasAdmin from "./components/admin/RespuestasAdmin";
 
 const AppRoutes = () => {
     const logoutMessage = useLogout();
@@ -53,6 +54,7 @@ const AppRoutes = () => {
                     <Route index element={<DashboardAdmin />} />
                     <Route path="usuarios" element={<UsuariosAdmin />} />
                     <Route path="comentarios" element={<ComentariosAdmin />} />
+                    <Route path="respuestas" element={<RespuestasAdmin />} />
                     <Route path="qr" element={<QRCodesAdmin />} />
                     <Route path="*" element={<DashboardAdmin />} />
                 </Route>

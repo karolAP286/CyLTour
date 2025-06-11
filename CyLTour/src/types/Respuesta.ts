@@ -7,7 +7,7 @@ export interface Respuesta {
   contenido: string;
   usuario_id: number;
   created_at: string;
-  updated_at: string | null;
+  updated_at: string;
   comentario: Comentario; 
   usuario: Usuario;        
 }

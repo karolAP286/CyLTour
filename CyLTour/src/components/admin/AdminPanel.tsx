@@ -42,6 +42,12 @@ const AdminPanel = () => {
             onClick: () => navigate("/admin/comentarios"),
         },
         {
+            key: "/admin/respuestas",
+            icon: <FileTextOutlined />,
+            label: "Respuestas pendientes",
+            onClick: () => navigate("/admin/respuestas"),
+        },
+        {
             key: "/admin/qr",
             icon: <QrcodeOutlined />,
             label: "Códigos QR",
