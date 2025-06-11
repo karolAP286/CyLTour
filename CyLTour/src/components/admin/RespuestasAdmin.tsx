@@ -129,11 +129,6 @@ const RespuestasAdmin = () => {
             key: "autor",
         },
         {
-            title: "Correo",
-            dataIndex: ["usuario", "correo"],
-            key: "correo",
-        },
-        {
             title: "Respuesta",
             dataIndex: "contenido",
             key: "contenido",

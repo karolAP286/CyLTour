@@ -78,11 +78,6 @@ const ComentariosAdmin = () => {
             key: "autor",
         },
         {
-            title: "Correo",
-            dataIndex: ["usuario", "correo"],
-            key: "correo",
-        },
-        {
             title: "Comentario",
             dataIndex: "contenido",
             key: "contenido",
