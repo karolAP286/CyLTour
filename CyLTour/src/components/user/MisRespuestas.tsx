@@ -1,38 +1,41 @@
 import { useEffect, useState } from "react";
-import { Table, message, Tag } from "antd";
-import { getRespuestasUsuario } from "../../services/apiService";
+import { Table, message, Tag, Popconfirm, Button } from "antd";
+import {
+    deleteRespuesta,
+    getRespuestasUsuario,
+} from "../../services/apiService";
 import { Respuesta } from "../../types/Respuesta";
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { DeleteOutlined, InfoCircleOutlined } from "@ant-design/icons";
 
 const MisRespuestas = () => {
     const [respuestas, setRespuestas] = useState<Respuesta[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [deleting, setDeleting] = useState<number | null>(null);
 
-    useEffect(() => {
-        const fetchRespuestas = async () => {
-            try {
-                const encodedId = localStorage.getItem("user_id");
-                if (!encodedId) {
-                    message.error("Usuario no autenticado");
-                    return;
-                }
-
-                const userId = parseInt(atob(encodedId), 10);
-                if (isNaN(userId)) {
-                    message.error("ID de usuario inválido");
-                    return;
-                }
-
-                const data = await getRespuestasUsuario(userId);
-                setRespuestas(data);
-            } catch (error) {
-                console.error("Error al cargar respuestas:", error);
-                message.error("No se pudieron cargar las respuestas");
-            } finally {
-                setLoading(false);
+    const fetchRespuestas = async () => {
+        try {
+            const encodedId = localStorage.getItem("user_id");
+            if (!encodedId) {
+                message.error("Usuario no autenticado");
+                return;
             }
-        };
 
+            const userId = parseInt(atob(encodedId), 10);
+            if (isNaN(userId)) {
+                message.error("ID de usuario inválido");
+                return;
+            }
+
+            const data = await getRespuestasUsuario(userId);
+            setRespuestas(data);
+        } catch (error) {
+            console.error("Error al cargar respuestas:", error);
+            message.error("No se pudieron cargar las respuestas");
+        } finally {
+            setLoading(false);
+        }
+    };
+    useEffect(() => {
         fetchRespuestas();
     }, []);
 
@@ -60,6 +63,19 @@ const MisRespuestas = () => {
                 return <Tag color="default">Desconocido</Tag>;
         }
     };
+    const handleDelete = async (respuestaId: number) => {
+        setDeleting(respuestaId);
+        try {
+            await deleteRespuesta(respuestaId);
+            message.success("Respuesta eliminada");
+            fetchRespuestas();
+        } catch (error) {
+            console.error("Error al eliminar respuesta:", error);
+            message.error("No se pudo eliminar la respuesta");
+        } finally {
+            setDeleting(null);
+        }
+    };
 
     const columns = [
         {
@@ -84,6 +100,27 @@ const MisRespuestas = () => {
             dataIndex: "created_at",
             key: "fecha",
             render: (fecha: string) => new Date(fecha).toLocaleDateString(),
+        },
+        {
+            title: "Acciones",
+            key: "acciones",
+            render: (_: any, record: Respuesta) => (
+                <Popconfirm
+                    title="¿Estás seguro de que deseas eliminar esta respuesta?"
+                    onConfirm={() => handleDelete(record.id)}
+                    okText="Sí"
+                    cancelText="No"
+                >
+                    <Button
+                        type="primary"
+                        danger
+                        icon={<DeleteOutlined />}
+                        loading={deleting === record.id}
+                    >
+                        Eliminar
+                    </Button>
+                </Popconfirm>
+            ),
         },
     ];
 
