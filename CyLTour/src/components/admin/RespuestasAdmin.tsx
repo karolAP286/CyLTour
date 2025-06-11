@@ -47,7 +47,11 @@ const RespuestasAdmin = () => {
                 })
             );
 
-            setRespuestas(respuestasConDatos);
+            const sinAprobadas = respuestasConDatos.filter(
+                (respuesta) => !respuesta.contenido.trim().endsWith("1")
+            );
+
+            setRespuestas(sinAprobadas);
         } catch (error) {
             console.error("Error al cargar respuestas:", error);
         } finally {
@@ -191,8 +195,6 @@ const RespuestasAdmin = () => {
                         </Button>
                     </>
                 );
-
-                return null;
             },
         },
     ];
