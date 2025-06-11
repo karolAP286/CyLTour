@@ -67,6 +67,16 @@ const ComentariosList: React.FC<ComentariosListProps> = ({ id }) => {
         fetchComentarios();
     }, []);
 
+    const esRespuestaValida = (respuesta: Respuesta) => {
+        const contenido = respuesta.contenido.trim();
+        if (respuesta.updated_at === respuesta.created_at) return false;
+        if (contenido.endsWith("0")) return false; 
+        return true; 
+    };
+
+    const limpiarContenido = (contenido: string) =>
+        contenido.trim().replace(/[01]$/, "").trim();
+
     const onFinishComentario = async (values: any) => {
         if (!usuarioId) {
             setErrorMessage("Debes estar autenticado para comentar.");
@@ -99,7 +109,7 @@ const ComentariosList: React.FC<ComentariosListProps> = ({ id }) => {
                 comentario_id: respondiendoA!,
                 usuario_id: usuarioId,
             });
-            setSuccessMessage("Respuesta enviada");
+            setSuccessMessage("Respuesta enviada, esperando aprobación");
             respuestaForm.resetFields();
             setRespondiendoA(null);
             fetchComentarios();
@@ -146,143 +156,121 @@ const ComentariosList: React.FC<ComentariosListProps> = ({ id }) => {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <Title level={5}>Comentarios:</Title>
-                    {comentarios.map((comentario) => (
-                        <motion.div
-                            key={comentario.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5 }}
-                            style={{ marginBottom: "16px" }}
-                        >
-                            <Card
-                                hoverable
-                                className="rounded-2xl shadow-md"
-                                cover={
-                                    comentario.url_imagen && (
-                                        <img
-                                            alt="Imagen del comentario"
-                                            src={comentario.url_imagen}
-                                            className="object-cover h-48 w-full"
-                                        />
-                                    )
-                                }
+                    {comentarios.map((comentario) => {
+                        const respuestasAprobadas = comentario.respuestas?.filter(esRespuestaValida) || [];
+
+                        return (
+                            <motion.div
+                                key={comentario.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5 }}
+                                style={{ marginBottom: "16px" }}
                             >
-                                <Meta
-                                    title={
-                                        <div className="flex items-center justify-between">
-                                            <span>
-                                                {comentario.usuario?.nombre ??
-                                                    "Usuario"}
-                                            </span>
-                                            <Rate
-                                                style={{ marginLeft: "10px" }}
-                                                disabled
-                                                value={comentario.puntuacion}
+                                <Card
+                                    hoverable
+                                    className="rounded-2xl shadow-md"
+                                    cover={
+                                        comentario.url_imagen && (
+                                            <img
+                                                alt="Imagen del comentario"
+                                                src={comentario.url_imagen}
+                                                className="object-cover h-48 w-full"
                                             />
-                                        </div>
+                                        )
                                     }
-                                    description={
-                                        <div>
-                                            <p>{comentario.contenido}</p>
-                                            <div className="flex gap-2 mt-2">
-                                                {comentario.respuestas &&
-                                                    comentario.respuestas
-                                                        .length > 0 && (
+                                >
+                                    <Meta
+                                        title={
+                                            <div className="flex items-center justify-between">
+                                                <span>
+                                                    {comentario.usuario?.nombre ?? "Usuario"}
+                                                </span>
+                                                <Rate
+                                                    style={{ marginLeft: "10px" }}
+                                                    disabled
+                                                    value={comentario.puntuacion}
+                                                />
+                                            </div>
+                                        }
+                                        description={
+                                            <div>
+                                                <p>{comentario.contenido}</p>
+                                                <div className="flex gap-2 mt-2">
+                                                    {respuestasAprobadas.length > 0 && (
                                                         <Button
                                                             size="small"
                                                             type="link"
                                                             onClick={() =>
-                                                                toggleRespuestas(
-                                                                    comentario.id
-                                                                )
+                                                                toggleRespuestas(comentario.id)
                                                             }
                                                         >
-                                                            {respuestasVisibles[
-                                                                comentario.id
-                                                            ]
+                                                            {respuestasVisibles[comentario.id]
                                                                 ? "Ocultar respuestas"
-                                                                : `Ver respuestas (${comentario.respuestas.length})`}
+                                                                : `Ver respuestas (${respuestasAprobadas.length})`}
                                                         </Button>
                                                     )}
 
-                                                <Button
-                                                    size="small"
-                                                    type="link"
-                                                    onClick={() =>
-                                                        setRespondiendoA(
-                                                            (prev) =>
-                                                                prev ===
-                                                                comentario.id
-                                                                    ? null
-                                                                    : comentario.id
-                                                        )
-                                                    }
-                                                >
-                                                    {respondiendoA ===
-                                                    comentario.id
-                                                        ? "Cancelar"
-                                                        : "Responder"}
-                                                </Button>
-                                            </div>
+                                                    <Button
+                                                        size="small"
+                                                        type="link"
+                                                        onClick={() =>
+                                                            setRespondiendoA(
+                                                                (prev) =>
+                                                                    prev === comentario.id
+                                                                        ? null
+                                                                        : comentario.id
+                                                            )
+                                                        }
+                                                    >
+                                                        {respondiendoA === comentario.id
+                                                            ? "Cancelar"
+                                                            : "Responder"}
+                                                    </Button>
+                                                </div>
 
-                                            {respuestasVisibles[
-                                                comentario.id
-                                            ] &&
-                                                comentario.respuestas?.map(
-                                                    (r: Respuesta) => (
+                                                {respuestasVisibles[comentario.id] &&
+                                                    respuestasAprobadas.map((r: Respuesta) => (
                                                         <div
-                                                            style={{
-                                                                marginTop:
-                                                                    "8px",
-                                                            }}
+                                                            style={{ marginTop: "8px" }}
                                                             key={r.created_at}
                                                             className="mt-2 ml-4 p-2 bg-gray-100 rounded"
                                                         >
                                                             <b>
-                                                                {r.usuario
-                                                                    ?.nombre ??
-                                                                    "Usuario"}
-                                                                :
+                                                                {r.usuario?.nombre ?? "Usuario"}:
                                                             </b>{" "}
-                                                            {r.contenido}
+                                                            {limpiarContenido(r.contenido)}
                                                         </div>
-                                                    )
-                                                )}
+                                                    ))}
 
-                                            {respondiendoA ===
-                                                comentario.id && (
-                                                <Form
-                                                    style={{ marginTop: "8px" }}
-                                                    form={respuestaForm}
-                                                    onFinish={onFinishRespuesta}
-                                                    layout="vertical"
-                                                >
-                                                    <Form.Item
-                                                        name="respuesta"
-                                                        rules={[
-                                                            { required: true },
-                                                        ]}
+                                                {respondiendoA === comentario.id && (
+                                                    <Form
+                                                        style={{ marginTop: "8px" }}
+                                                        form={respuestaForm}
+                                                        onFinish={onFinishRespuesta}
+                                                        layout="vertical"
                                                     >
-                                                        <TextArea
-                                                            rows={2}
-                                                            placeholder="Escribe tu respuesta"
-                                                        />
-                                                    </Form.Item>
-                                                    <Button
-                                                        htmlType="submit"
-                                                        type="primary"
-                                                        size="small"
-                                                    >
-                                                        Enviar respuesta
-                                                    </Button>
-                                                </Form>
-                                            )}
-                                        </div>
-                                    }
-                                />
-                            </Card>
-                        </motion.div>
-                    ))}
+                                                        <Form.Item
+                                                            name="respuesta"
+                                                            rules={[{ required: true }]}
+                                                        >
+                                                            <TextArea
+                                                                rows={2}
+                                                                placeholder="Escribe tu respuesta"
+                                                            />
+                                                        </Form.Item>
+                                                        <Button htmlType="submit" type="primary" size="small">
+                                                            Enviar respuesta
+                                                        </Button>
+                                                    </Form>
+                                                )}
+                                            </div>
+                                        }
+                                    />
+                                </Card>
+                            </motion.div>
+                        );
+                    })}
                 </div>
             )}
             <Form
