@@ -201,7 +201,7 @@ const RespuestasAdmin = () => {
 
     return (
         <div>
-            <h2>Respuestas pendientes o gestionadas</h2>
+            <h2>Respuestas pendientes o rechazadas</h2>
             <Table
                 columns={columns}
                 dataSource={respuestas}
