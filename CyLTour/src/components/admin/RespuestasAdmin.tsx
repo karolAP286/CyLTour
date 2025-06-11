@@ -178,7 +178,7 @@ const RespuestasAdmin = () => {
                             Aprobar
                         </Button>
                         <Button
-                            type="default"
+                            type="primary"
                             danger
                             onClick={() =>
                                 handleRechazarRespuesta(record.id, record)

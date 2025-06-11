@@ -88,7 +88,7 @@ const MisRespuestas = () => {
     const renderEstadoTag = (estado: string) => {
         switch (estado) {
             case "En curso":
-                return <Tag color="blue">En curso</Tag>;
+                return <Tag color="blue">Pendiente de aprobar</Tag>;
             case "Aprobado":
                 return <Tag color="green">Aprobado</Tag>;
             case "Rechazado":

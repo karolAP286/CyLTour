@@ -137,7 +137,7 @@ const ComentariosAdmin = () => {
                                 Aprobar
                             </Button>
                             <Button
-                                type="default"
+                                type="primary"
                                 danger
                                 onClick={() =>
                                     handleRechazarComentario(record.id, record)

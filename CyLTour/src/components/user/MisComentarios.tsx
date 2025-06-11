@@ -108,7 +108,7 @@ const MisComentarios = () => {
                 if (record.estado) {
                     return <Tag color="green">Aprobado</Tag>;
                 } else if (isPendiente) {
-                    return <Tag color="blue">En curso</Tag>;
+                    return <Tag color="blue">Pendiente de aprobar</Tag>;
                 } else {
                     return <Tag color="red">Rechazado</Tag>;
                 }
