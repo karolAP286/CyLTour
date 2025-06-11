@@ -8,6 +8,7 @@ import {
     QrcodeOutlined,
     SettingOutlined,
     DashboardOutlined,
+    MessageOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
 import "./AdminPanel.css";
@@ -43,7 +44,7 @@ const AdminPanel = () => {
         },
         {
             key: "/admin/respuestas",
-            icon: <FileTextOutlined />,
+            icon: <MessageOutlined />,
             label: "Respuestas pendientes",
             onClick: () => navigate("/admin/respuestas"),
         },
