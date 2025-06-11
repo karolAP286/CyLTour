@@ -39,13 +39,13 @@ const AdminPanel = () => {
         {
             key: "/admin/comentarios",
             icon: <FileTextOutlined />,
-            label: "Comentarios pendientes",
+            label: "Comentarios",
             onClick: () => navigate("/admin/comentarios"),
         },
         {
             key: "/admin/respuestas",
             icon: <MessageOutlined />,
-            label: "Respuestas pendientes",
+            label: "Respuestas",
             onClick: () => navigate("/admin/respuestas"),
         },
         {

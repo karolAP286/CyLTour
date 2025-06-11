@@ -17,11 +17,16 @@ const LayoutComponent: React.FC = () => {
 
     const [drawerOpen, setDrawerOpen] = useState(false);
     const items = useMenuItems();
-    const menuItems = items.map(({ key, label, path }) => ({
-        key,
-        label,
-        onClick: () => navigate(path),
-    }));
+    const menuItems = items.map(({ key, label, path }) => (
+    <Menu.Item
+        key={key}
+        onClick={() => navigate(path)}
+        className={key === "profile" ? "profile" : ""}
+    >
+        {label}
+    </Menu.Item>
+));
+
     const screens = useBreakpoint();
     const isMobile = !screens.md;
 
@@ -46,18 +51,21 @@ const LayoutComponent: React.FC = () => {
                             <Menu
                                 key="mobileMenu"
                                 mode="vertical"
-                                items={menuItems}
                                 onClick={() => setDrawerOpen(false)}
-                            />
+                            >
+                                {menuItems}
+                            </Menu>
                         </Drawer>
                     </>
                 ) : (
                     <Menu
                         key="desktopMenu"
                         mode="horizontal"
-                        items={menuItems}
+                        
                         className="menu-custom"
-                    />
+                    >
+                        {menuItems}
+                    </Menu>
                 )}
             </Header>
 
